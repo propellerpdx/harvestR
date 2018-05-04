@@ -29,7 +29,7 @@
 #' @importFrom jsonlite fromJSON
 #'
 #' @export
-get_harvestR <- function( ##git test
+get_harvestR <- function(
   table = NULL,
   user = NULL,
   key = NULL,
