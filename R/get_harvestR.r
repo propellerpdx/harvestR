@@ -36,17 +36,11 @@ get_harvestR <- function(
   email = '',
   query=NULL)
   {
-  if(is.null(query)==T){
-    query <- list(per_page='100')
-  } else if(max(stringr::str_detect(names(query),'per_page'))==1){
-    query <- query
-  } else{
-    query<-append(query,list(per_page='100'))
-  }
+  #if(exists('query')==F){query<-NULL}
   if(table %in% c('clients','invoices','estimates','expenses','tasks','time_entries','projects','roles','users')){
     table_url <- paste0('v2/',table)
-    total_pages <- httr::modify_url(url="https://api.harvestapp.com",path=table_url,query=query) %>%
-      purrr::map(~httr::GET(.,httr::add_headers("Harvest-Account-ID" = user,Authorization = key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email))) %>%
+    total_pages <- httr::modify_url(url="https://api.harvestapp.com",path=table_url) %>%
+      purrr::map(~httr::GET(.,httr::add_headers("Harvest-Account-ID" = user,Authorization = key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email), query = query)) %>%
       purrr::map(~httr::content(., as="text", encoding = "UTF-8")) %>%
       purrr::map(~jsonlite::fromJSON(., flatten = T)) %>%
       purrr::map_dbl("total_pages")
@@ -54,9 +48,8 @@ get_harvestR <- function(
       assign(paste0(table),envir = .GlobalEnv,
              total_pages %>%
                seq(from=1,to=.) %>%
-               purrr::map(., function(x) append(query,c(page=as.character(x)))) %>%
-               purrr::map_chr(~httr::modify_url(url="https://api.harvestapp.com",path=paste0(table_url,'?page=',.$page))) %>%
-               purrr::map_chr(.,httr::modify_url,query=query) %>%
+               #Make an API call for every page
+               purrr::map_chr(~httr::modify_url(url="https://api.harvestapp.com",path=paste0(table_url,"?page=",.))) %>%
                purrr::map(~httr::GET(.,httr::add_headers("Harvest-Account-ID" = user,Authorization = key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email),query = query)) %>%
                purrr::map(~httr::content(., as="text", encoding = "UTF-8")) %>%
                purrr::map(~jsonlite::fromJSON(., flatten = T)) %>%
@@ -73,10 +66,9 @@ get_harvestR <- function(
         begin_time <- Sys.time()
         assign(paste0(table,i),
                seq(from=i,to=x) %>%
-                 purrr::map(., function(x) append(query,c(page=as.character(x)))) %>%
-                 purrr::map_chr(~httr::modify_url(url="https://api.harvestapp.com",path=paste0(table_url,'?page=',.$page))) %>%
-                 purrr::map_chr(.,httr::modify_url,query=query) %>%
-                 purrr::map(~httr::GET(.,httr::add_headers("Harvest-Account-ID" = user,Authorization = key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email))) %>%
+                 #Make an API call for every page
+                 purrr::map_chr(~httr::modify_url(url="https://api.harvestapp.com",path=paste0(table_url,"?page=",.))) %>%
+                 purrr::map(~httr::GET(.,httr::add_headers("Harvest-Account-ID" = user,Authorization = key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email),query = query)) %>%
                  purrr::map(~httr::content(., as="text", encoding = "UTF-8")) %>%
                  purrr::map(~jsonlite::fromJSON(., flatten = T)) %>%
                  #Combine the results into one data frame
@@ -93,13 +85,12 @@ get_harvestR <- function(
   }
   else if(table %in% c('project_task_assignments','project_user_assignments'))
   {
-    get_harvestR(table='projects',user=user,key=key, email = email, query=query)
+    get_harvestR(table='projects',user=user,key=key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email)
     project_ids <<- projects$id
     api_name <<- stringr::str_sub(table,start=9,end = nchar(table))
     assign(paste0(table),envir = .GlobalEnv,
            # Find the number of pages
            purrr::map2_chr(.x = project_ids, .y=api_name, function(.x,.y) paste0('https://api.harvestapp.com/v2/projects/',.x,'/',.y)) %>%
-             purrr::map_chr(.,httr::modify_url,query=query) %>%
              purrr::map(~httr::GET(.,httr::add_headers("Harvest-Account-ID" = user,Authorization = key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email),query = query)) %>%
              purrr::map(~httr::content(., as="text", encoding = "UTF-8")) %>%
              purrr::map(~jsonlite::fromJSON(., flatten = T)) %>%
@@ -108,13 +99,12 @@ get_harvestR <- function(
   }
   else if(table %in% c('user_project_assignments'))
   {
-    get_harvestR(table='users',user=user,key=key, email=email, query=query)
+    get_harvestR(table='users',user=user,key=key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email)
     user_ids <- users$id
     api_name <- stringr::str_sub(table,start=6,end = nchar(table))
     assign(paste0(table),envir = .GlobalEnv,
            # Find the number of pages
            purrr::map2_chr(.x = user_ids, .y=api_name, function(.x,.y) paste0('https://api.harvestapp.com/v2/users/',.x,'/',.y)) %>%
-             purrr::map_chr(.,httr::modify_url,query=query) %>%
              purrr::map(~httr::GET(.,httr::add_headers("Harvest-Account-ID" = user,Authorization = key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email),query = query)) %>%
              purrr::map(~httr::content(., as="text", encoding = "UTF-8")) %>%
              purrr::map(~jsonlite::fromJSON(., flatten = T)) %>%
@@ -122,7 +112,7 @@ get_harvestR <- function(
              do.call("bind_rows", .))
   }
   else if(table=='all'){
-    purrr::map(c('clients','invoices','tasks','time_entries','projects','roles','users','user_project_assignments','project_task_assignments','project_user_assignments'),get_harvestR,user=user,key=key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email,query = query) #'estimates','expenses'
+    purrr::map(c('clients','invoices','tasks','time_entries','projects','roles','users','user_project_assignments','project_task_assignments','project_user_assignments'),get_harvestR,user=user,key=key, email = email,query = query) #'estimates','expenses'
   }
   else
   {
