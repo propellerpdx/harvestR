@@ -85,7 +85,7 @@ get_harvestR <- function(
   }
   else if(table %in% c('project_task_assignments','project_user_assignments'))
   {
-    get_harvestR(table='projects',user=user,key=key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email)
+    get_harvestR(table='projects',user=user,key=key,email=email)
     project_ids <<- projects$id
     api_name <<- stringr::str_sub(table,start=9,end = nchar(table))
     assign(paste0(table),envir = .GlobalEnv,
@@ -99,7 +99,7 @@ get_harvestR <- function(
   }
   else if(table %in% c('user_project_assignments'))
   {
-    get_harvestR(table='users',user=user,key=key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email)
+    get_harvestR(table='users',user=user,key=key,email=email)
     user_ids <- users$id
     api_name <- stringr::str_sub(table,start=6,end = nchar(table))
     assign(paste0(table),envir = .GlobalEnv,
