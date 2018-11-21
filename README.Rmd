@@ -28,19 +28,13 @@ devtools::install_github("propellerpdx/harvestR")
 
 ## Extract Data
 
-###get_harvestR
+###get_table
 The get wrapper extracts tables from Harvest by name. It allows the user to pass parameters to limit request size, but without parameters it will pull the entire table. 
-```{r get_harvestR, eval=FALSE, include=FALSE}
+```{r get_table, eval=FALSE, include=FALSE}
 user_id <- 'your_user_id'
 api_key <- paste0('Bearer ','you_api_key')
-harvestR::get_harvestR(table = c('clients','users','projects') , user = user_id,key = api_key)
-harvestR::get_harvestR(table = c('time_entries') , user = user_id, key = api_key, email = 'your_email',query = list(from = '2018-1-1', to = '2018-3-31'))
+get_table(table = 'projects', user = user_id,key = api_key)
+get_table(table = 'time_entries' , user = user_id, key = api_key, email = 'your_email',query = list(from = '2018-01-01', to = '2018-03-31'))
+
 ```
 
-###write_harvestR
-Coming soon...
-
-## Post Data
-
-###post_harvestR
-Coming soon...
