@@ -7,6 +7,7 @@
 #' @param key Harvest API key for API authentication. Register at \href{https://id.getharvest.com/developers}{Harvest Developers}.
 #' @param email Optional argument, requester email address for the "From" header in the get request.
 #' @param query Optional argument, API query parameters to be provided in a list. Refer to \href{https://help.getharvest.com/api-v2}{Harvest APIv2} for acceptable parameters for each table. A few examples include:  (\code{from = "2018-1-1"} or \code{to = "2018-3-31"} or \code{project_id = "1234"} or \code{client_id = "1234"} or \code{user_id = "1234"})
+#' @param verbose logical; passed to httr; A verbose connection provides much more information about the flow of information between the client and server. \href{https://github.com/r-lib/httr}{httr documentation}
 #'
 #' @return tbl_df
 #'
@@ -32,7 +33,8 @@ get_table <- function(
   user = NULL,
   key = NULL,
   email = '',
-  query=NULL)
+  query=NULL,
+  verbose=FALSE)
 {
   if(!is.null(query$return_df)){
     return_df <- query[[length(query)]]
@@ -49,10 +51,8 @@ get_table <- function(
   # Full http_version options can be seen here https://github.com/curl/curl/blob/master/include/curl/curl.h by searching for "http_version"
   # Full httr docs https://cran.r-project.org/web/packages/httr/httr.pdf
 
-  # Below line will provide verbose output (helpful for troubleshooting)
-  # response = httr::with_config(config=config(verbose=TRUE,http_version=2), httr::GET(url,httr::add_headers("Harvest-Account-ID" = user,Authorization = key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email), query = query))
   response_df <- url %>%
-    purrr::map(., function(x) httr::with_config(config=config(http_version=2), httr::GET(x,httr::add_headers("Harvest-Account-ID" = user,Authorization = key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email), query = query))) %>%
+    purrr::map(., function(x) httr::with_config(config=config(verbose=verbose, http_version=2), httr::GET(x,httr::add_headers("Harvest-Account-ID" = user,Authorization = key,'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)', 'From' = email), query = query))) %>%
     purrr::map(., function(x) httr::content(x, as="text", encoding = "UTF-8")) %>%
     purrr::map(., function(x) jsonlite::fromJSON(x, flatten = T))
 
