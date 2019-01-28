@@ -1,9 +1,17 @@
 Package: harvestR
-Title: What the Package Does (one line, title case)
+Title: Utility functions for interacting with the Harvest API
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Authors@R: person("Mark", "Druffel", email = "mdruffel@propellerpdx.com", role = c("aut", "cre"))
+Description: Provides utility functions for interacting with the Harvest time tracking system via
+  their REST API. 
 Depends: R (>= 3.4.3)
+Imports:
+  httr,
+  magrittr,
+  purrr,
+  dplyr,
+  naptime,
+  jsonlite
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
