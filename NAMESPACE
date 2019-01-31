@@ -3,7 +3,7 @@
 export(get_table)
 import(dplyr)
 import(httr)
-import(jsonlite, "fromJSON")
+importFrom(jsonlite, "fromJSON")
 import(naptime)
 import(purrr)
 importFrom(magrittr,"%>%")
