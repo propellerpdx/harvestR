@@ -26,7 +26,7 @@
 #' @import purrr
 #' @import dplyr
 #' @import naptime
-#' @import jsonlite
+#' @importFrom jsonlite fromJSON
 #' @export
 get_table <- function(
   table = NULL,
