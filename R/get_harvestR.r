@@ -21,12 +21,8 @@
 #' @author Mark Druffel, \email{mdruffel@propellerpdx.com}
 #' @references \url{https://id.getharvest.com/developers}, \url{https://help.getharvest.com/api-v2}, \url{https://github.com/r-lib/httr}
 #'
-#' @import httr
 #' @importFrom magrittr %>%
-#' @import purrr
-#' @import dplyr
-#' @import naptime
-#' @importFrom jsonlite fromJSON
+#'
 #' @export
 get_table <- function(
   table = NULL,
