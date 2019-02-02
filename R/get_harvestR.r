@@ -22,6 +22,7 @@
 #' @references \url{https://id.getharvest.com/developers}, \url{https://help.getharvest.com/api-v2}, \url{https://github.com/r-lib/httr}
 #'
 #' @importFrom magrittr %>%
+#' @import httr
 #'
 #' @export
 get_table <- function(
