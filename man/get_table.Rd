@@ -31,7 +31,8 @@ Submits get requests to the Harvest API v2. The function is a wrapper around the
 user_id <- 'your_user_id'
 api_key <- paste0('Bearer ','you_api_key')
 get_table(table = 'projects', user = user_id,key = api_key)
-get_table(table = 'time_entries' , user = user_id, key = api_key, email = 'your_email',query = list(from = '2018-01-01', to = '2018-03-31'))
+get_table(table = 'time_entries' , user = user_id, key = api_key,
+ email = 'your_email',query = list(from = '2018-01-01', to = '2018-03-31'))
 
 }
 \references{
