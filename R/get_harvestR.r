@@ -34,7 +34,7 @@ get_table <- function(
   verbose=FALSE)
 {
 
-  if(!is.null(key))
+  if(!is.null(key) && !grepl("^Bearer ", key))
     key <- paste0('Bearer ', key)
 
   if(!is.null(query$return_df)){
