@@ -13,8 +13,7 @@
 #'
 #' @examples
 #'
-#' user_id <- 'your_user_id'
-#' api_key <- paste0('Bearer ','you_api_key')
+#' api_key <- 'your_user_id'
 #' get_table(table = 'projects', user = user_id,key = api_key)
 #' get_table(table = 'time_entries' , user = user_id, key = api_key,
 #'  email = 'your_email',query = list(from = '2018-01-01', to = '2018-03-31'))
@@ -28,12 +27,16 @@
 #' @export
 get_table <- function(
   table = NULL,
-  user = NULL,
-  key = NULL,
+  user = harvest_id(),
+  key = harvest_pat(),
   email = '',
   query=NULL,
   verbose=FALSE)
 {
+
+  if(!is.null(key))
+    key <- paste0('Bearer ', key)
+
   if(!is.null(query$return_df)){
     return_df <- query[[length(query)]]
     query <- query[[1:(length(query)-1)]]}

@@ -4,8 +4,8 @@
 \alias{get_table}
 \title{Harvest API v2 get request wrapper}
 \usage{
-get_table(table = NULL, user = NULL, key = NULL, email = "",
-  query = NULL, verbose = FALSE)
+get_table(table = NULL, user = harvest_id(), key = harvest_pat(),
+  email = "", query = NULL, verbose = FALSE)
 }
 \arguments{
 \item{table}{Harvest API table that does not require specific ID's for the GET request. Refer to \href{https://help.getharvest.com/api-v2}{Harvest APIv2}. Possible values include the following as a string:  (\code{"clients"} or \code{"invoices"} or \code{"estimates"} or \code{"expenses"} or \code{"tasks"} or \code{"time_entries"} or \code{"projects"} or \code{"roles"} or \code{"users"})}
@@ -28,8 +28,7 @@ Submits get requests to the Harvest API v2. The function is a wrapper around the
 }
 \examples{
 
-user_id <- 'your_user_id'
-api_key <- paste0('Bearer ','you_api_key')
+api_key <- 'your_user_id'
 get_table(table = 'projects', user = user_id,key = api_key)
 get_table(table = 'time_entries' , user = user_id, key = api_key,
  email = 'your_email',query = list(from = '2018-01-01', to = '2018-03-31'))
