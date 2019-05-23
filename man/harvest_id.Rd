@@ -10,5 +10,19 @@ harvest_id()
 A string of the Harvest Account ID
 }
 \description{
-Looks in env var HARVEST_ACCOUNT_ID
+A convenience function to allow you to store your Harvest
+  account ID in a system env variable
+}
+\details{
+The HARVEST_ACCOUNT_ID env variable should contain your Harvest
+  account ID. Register at \href{https://id.getharvest.com/developers}{Harvest
+  Developers}.
+
+  NOTE: The user is advised to do this as her/his own risk and this method
+  may not be wise for production systems. System env variables are *not* a
+  secure storage mechanism. They are in plain text and a hacker could
+  theoretically gain access to your API key once they have access to your
+  machine. The recommended approach is to store your API key in a secure
+  location, like your keychain, and pull it from there to pass to the
+  harvestR package.
 }
