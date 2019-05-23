@@ -97,7 +97,7 @@ get_table <- function(table = NULL,
                  )) %>%
     purrr::map(., function(x) httr::content(x, as="text", encoding = "UTF-8")) %>%
     purrr::map(., function(x) jsonlite::fromJSON(x, flatten = T))
-  print("made it!")
+
   next_page <- response_df %>% purrr::map('next_page')
 
   if(!exists('return_df')){return_df <- NULL}
