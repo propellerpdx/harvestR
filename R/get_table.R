@@ -9,7 +9,7 @@
 #' @param query Optional argument, API query parameters to be provided in a list. Refer to \href{https://help.getharvest.com/api-v2}{Harvest APIv2} for acceptable parameters for each table. A few examples include:  (\code{from = "2018-1-1"} or \code{to = "2018-3-31"} or \code{project_id = "1234"} or \code{client_id = "1234"} or \code{user_id = "1234"})
 #' @param verbose logical; passed to httr; A verbose connection provides much more information about the flow of information between the client and server. \href{https://github.com/r-lib/httr}{httr documentation}
 #' @param auto_retry logical;
-#' @param plan character
+#' @inheritDotParams future::plan()
 #' @param ... tbd
 #' @return tbl_df
 #'
@@ -27,7 +27,8 @@
 #' @import httr
 #'
 #' @export
-#
+?future::plan
+
 get_table <- function(
   table = NULL,
   user = NULL,
@@ -48,21 +49,22 @@ get_table <- function(
                                      key = key,
                                      email = email,
                                      auto_retry = auto_retry)
-
-  if(response$total_pages > 10){
-    future::plan(plan)
+  if(response$total_pages > 1){
     return_df <- response[[table]]
     urls <- purrr::map(2:response$total_pages, function(x) httr::modify_url(url, query = list(page = x)))
-    if(length(urls)>100){
-      message('More than 100 pages')
-    }
-    next_responses <- furrr::future_map(urls, function(x) harvestR:::get_request(url = x,
-                                                                                 user = user,
-                                                                                 key = key,
-                                                                                 email = email,
-                                                                                 auto_retry = auto_retry))
-    return_df <- purrr::map(next_responses, table) %>%
-      dplyr::bind_rows(return_df, .)
+    url_groups <- harvestR:::build_url_groups(urls = urls,
+                                              verbose = verbose)
+    responses <- purrr::map2(url_groups, names(url_groups), function(x, y) harvestR:::get_requests(urls = x,
+                                                                                                   group_name = y,
+                                                                                                   user = user,
+                                                                                                   key = key,
+                                                                                                   email = email,
+                                                                                                   auto_retry = auto_retry,
+                                                                                                   plan = plan))
+    return_dfs <- purrr::map(responses, function(x)
+      purrr::map(x, function(y) y$time_entries) %>% dplyr::bind_rows()) %>%
+      dplyr::bind_rows()
+    return_df <- dplyr::bind_rows(return_df, return_dfs)
   } else {
     return_df <- response[[table]]
   }
