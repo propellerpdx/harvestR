@@ -1,33 +1,39 @@
-#' Harvest API v2 get wrapper
+#' Harvest API v2 get request wrapper
 #'
-#' Submits get requests to the Harvest API v2. The function is a wrapper around the httr::GET function and safely returns the httr result as result or error.
+#' Submits get requests to the Harvest API v2 with retry functionality.
+#' Errors are messaged to the execution environment and set to NULL allowing user-facing function returns to provide data frame output.
 #'
-#' @param url tbd
-#' @inheritParams get_table
+#' @param url Character url of the get request.
+#' @param user Character account number (e.g. user = '12345') for authentication. Register at \href{https://id.getharvest.com/developers}{Harvest Developers}.
+#' @param key  Character key (e.g. key = 'Bearer <secret key>') for API authentication. Register at \href{https://id.getharvest.com/developers}{Harvest Developers}.
+#' @param email Character email address for API call. (Optional)
+#' @param verbose Logical scalar. Should the function provide verbose messaging back on each step?
+#' @param ... Internally used to indicated that the call is a retry.
 #'
-#' @return named list
+#' @return response object
 #'
 #' @examples
 #'
 #'
 #' @author Mark Druffel, \email{mdruffel@propellerpdx.com}
 #' @references
-#' \url{https://id.getharvest.com/developers},
-#' \url{https://help.getharvest.com/api-v2},
+#' \url{https://id.getharvest.com/developers}
+#' \url{https://help.getharvest.com/api-v2}
 #' \url{https://github.com/r-lib/httr}
+#' \url{https://curl.haxx.se/libcurl/c/CURLOPT_HTTP_VERSION.html}
 #'
 #' @importFrom magrittr %>%
-#' @import purrr
+#' @importFrom glue glue
+#' @importFrom jsonlite fromJSON
 #' @import httr
-#' @import furrr
-#' @import glue
 #'
+
 get_request <- function(url = NULL,
                         user = NULL,
                         key = NULL,
                         email = NULL,
-                        verbose = F,
                         auto_retry = F,
+                        verbose = F,
                         ...){
   input_params <- list(...)
   if(is.null(input_params$retry)){
@@ -39,25 +45,27 @@ get_request <- function(url = NULL,
                                                             Authorization = key,
                                                             'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)',
                                                             'From' = email)))
+  if(verbose==T){
+    message(glue::glue('{url} returned a status of {response$status_code}'))
+  }
   if(response$status_code==200){
     response_extract <- httr::content(response, as = "text", encoding = "UTF-8") %>%
       jsonlite::fromJSON(., flatten = T)
     return(response_extract)
   } else if (input_params$retry <= 2 & auto_retry == T) {
     input_params$retry <- input_params$retry + 1
-    message(glue::glue('Requested {response$url} and received {response$headers$status}. Attempting retry {input_params$retry} in 15 seconds'))
+    message(glue::glue('Attempting retry {input_params$retry} for {response$url} in 15 seconds'))
     Sys.sleep(15)
     get_request(url = url,
                 user = user,
                 key = key,
                 email = email,
-                verbose = verbose,
                 auto_retry = auto_retry,
+                verbose = verbose,
                 retry = input_params$retry)
   } else {
-    warning(glue::glue('Requested {response$url} and received {response$headers$status}. No more retries left, get_request() failed.'))
+    warning(glue::glue('No more retries left, get_request() failed for {response$url}.'))
     response_extract <- NULL
   }
   return(response_exract)
 }
-

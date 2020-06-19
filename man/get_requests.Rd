@@ -2,37 +2,46 @@
 % Please edit documentation in R/get_requests.R
 \name{get_requests}
 \alias{get_requests}
-\title{Harvest API v2 get wrapper}
+\title{Execute multiple get_request calls}
 \usage{
 get_requests(
   urls = NULL,
   group_name = NULL,
-  user = user,
-  key = key,
-  email = email,
-  verbose = verbose,
-  auto_retry = auto_retry,
-  plan = plan,
-  ...
+  user = NULL,
+  key = NULL,
+  email = NULL,
+  verbose = NULL,
+  auto_retry = NULL,
+  strategy = NULL
 )
 }
 \arguments{
-\item{url}{tbd}
+\item{urls}{Named list of character vectors of urls in groups from build_url_groups function.}
+
+\item{user}{Character account number (e.g. user = '12345') for authentication. Register at \href{https://id.getharvest.com/developers}{Harvest Developers}.}
+
+\item{key}{Character key (e.g. key = 'Bearer <secret key>') for API authentication. Register at \href{https://id.getharvest.com/developers}{Harvest Developers}.}
+
+\item{email}{Character email address for API call. (Optional)}
+
+\item{verbose}{Logical scalar. Should the function provide verbose messaging back on each step?}
+
+\item{strategy}{Character vector passed to future::plan strategy parameter. Examples include 'sequential', 'multiprocess', & 'multicore'.}
 }
 \value{
 named list
 }
 \description{
-Submits get requests to the Harvest API v2. The function is a wrapper around the httr::GET function and safely returns the httr result as result or error.
-}
-\examples{
-
-
+Submits multiple get requests to the Harvest API v2. Supports parallel execution through furrr & the future package.
 }
 \references{
-\url{https://id.getharvest.com/developers},
-\url{https://help.getharvest.com/api-v2},
-\url{https://github.com/r-lib/httr}
+\url{https://github.com/HenrikBengtsson/future}
+\url{https://davisvaughan.github.io/furrr}
+\url{https://rstudio.com/resources/rstudioconf-2020/parallel-computing-with-r-using-foreach-future-and-other-packages}
+\url{https://help.getharvest.com/api-v2/introduction/overview/general}
+}
+\seealso{
+[future::plan()] for details regarding how to implement parallel api calls
 }
 \author{
 Mark Druffel, \email{mdruffel@propellerpdx.com}

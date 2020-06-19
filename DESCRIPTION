@@ -1,9 +1,8 @@
 Package: harvestR
 Title: Utility functions for interacting with the Harvest API
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: person("Mark", "Druffel", email = "mdruffel@propellerpdx.com", role = c("aut", "cre"))
-Description: Provides utility functions for interacting with the Harvest time tracking system via
-  their REST API. 
+Description: Provides utility functions for interacting with the Harvest time tracking system API v2. 
 Depends: R (>= 3.4.3)
 Imports:
   httr,
@@ -12,7 +11,7 @@ Imports:
   dplyr,
   naptime,
   jsonlite
-License: What license is it under?
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.0
