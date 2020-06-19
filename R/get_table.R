@@ -36,26 +36,42 @@ get_table <- function(
   auto_retry = FALSE,
   strategy = NULL,
   verbose=FALSE){
+
+  # Setup Vars --------------------------------------------------------------
+
   url <- paste0('v2/', table) %>%
     httr::modify_url(url="https://api.harvestapp.com",
                      path=.,
                      query=query)
+
+
+  # Get Request -------------------------------------------------------------
+
   response <- harvestR:::get_request(url = url,
                                      user = user,
                                      key = key,
                                      email = email,
                                      auto_retry = auto_retry,
                                      verbose=verbose)
-  if(verbose == T){
-    if(response$total_pages>1){
+  # If not a bad request and verbose is on, provide message. If request is bad response$total_pages will be NULL
+  if(verbose == T & is.null(response$total_pages) == F){
+    if(response$total_pages > 1){
       message(glue::glue('Initial request shows {response$total_entries} records. Initiating the remaining {response$total_pages-1} requests.'))
     }
   }
+
+  # Get requests (multi-page) -----------------------------------------------
+
   if(response$total_pages > 1){
+    # Pull the dataframe from the initial get request
     return_df <- response[[table]]
+    # Build urls for the remaining requests
     urls <- purrr::map(2:response$total_pages, function(x) httr::modify_url(url, query = list(page = x)))
+    # Build url groups by sets of 100 to avoid rate limiting by Harvest
     url_groups <- harvestR:::build_url_groups(urls = urls,
                                               verbose = verbose)
+    # Pass url and the name of the url group,
+    # last group is named 'Last_Group' which keeps get_requests from pausing if the last group finishes in less than 15 seconds
     responses <- purrr::map2(url_groups, names(url_groups), function(x, y) harvestR:::get_requests(urls = x,
                                                                                                    group_name = y,
                                                                                                    user = user,
@@ -64,9 +80,12 @@ get_table <- function(
                                                                                                    auto_retry = auto_retry,
                                                                                                    strategy = strategy,
                                                                                                    verbose=verbose))
+    # responses uses map2 around a future_map call so it creates another level of list.
+    # Climb down the list and get the tables, then bind them all into a data frame
     return_dfs <- purrr::map(responses, function(x)
-      purrr::map(x, function(y) y$time_entries) %>% dplyr::bind_rows()) %>%
+      purrr::map(x, function(y) y[table]) %>% dplyr::bind_rows()) %>%
       dplyr::bind_rows()
+    # Add responses to the initial response
     return_df <- dplyr::bind_rows(return_df, return_dfs)
   } else {
     return_df <- response[[table]]

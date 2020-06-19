@@ -10,7 +10,7 @@ get_requests(
   user = NULL,
   key = NULL,
   email = NULL,
-  verbose = NULL,
+  verbose = F,
   auto_retry = NULL,
   strategy = NULL
 )

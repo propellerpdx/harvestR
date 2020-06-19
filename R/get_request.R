@@ -35,10 +35,18 @@ get_request <- function(url = NULL,
                         auto_retry = F,
                         verbose = F,
                         ...){
+
+
+  # Setup Vars --------------------------------------------------------------
+
+  # If retry is not provided, it's first try, function is recursive.
   input_params <- list(...)
   if(is.null(input_params$retry)){
     input_params$retry <- 0
   }
+
+  # Get Request -------------------------------------------------------------
+
   response <- httr::with_config(config = httr::config(verbose = verbose, http_version = 2),
                                 httr::GET(url,
                                           httr::add_headers("Harvest-Account-ID" = user,
@@ -53,6 +61,9 @@ get_request <- function(url = NULL,
       jsonlite::fromJSON(., flatten = T)
     return(response_extract)
   } else if (input_params$retry <= 2 & auto_retry == T) {
+
+    # Error Handling ----------------------------------------------------------
+
     input_params$retry <- input_params$retry + 1
     message(glue::glue('Attempting retry {input_params$retry} for {response$url} in 15 seconds'))
     Sys.sleep(15)

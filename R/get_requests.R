@@ -31,17 +31,32 @@ get_requests <- function(urls = NULL,
                          verbose = F,
                          auto_retry = NULL,
                          strategy = NULL){
+
+  # Setup Vars --------------------------------------------------------------
+
+  # If strategy is not provided we default to sequential (not parallel)
   if(is.null(strategy)==T){
     strategy <- 'sequential'
   }
+
+
+  # Future Config -----------------------------------------------------------
+
+  # Set plan for the execution
   future::plan(strategy = strategy)
+
+
+  # Get Requests --------------------------------------------------------
+
   start_time <- Sys.time()
+  # urls is a character vector no greater than 100 in length
   responses <- furrr::future_map(urls, function(x) harvestR:::get_request(url = x,
                                                                           user = user,
                                                                           key = key,
                                                                           email = email,
                                                                           auto_retry = auto_retry,
                                                                           verbose = verbose))
+  # If responses are returned in less than 15 seconds, R waits to avoid Harvest rate limiting
   end_time <- Sys.time()
   time <- lubridate::seconds(end_time - start_time)
   if(time < 15 & group_name != 'Last_Group'){
