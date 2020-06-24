@@ -78,5 +78,5 @@ get_request <- function(url = NULL,
     warning(glue::glue('No more retries left, get_request() failed for {response$url}.'))
     response_extract <- NULL
   }
-  return(response_exract)
+  return(response_extract)
 }
