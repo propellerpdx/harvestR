@@ -19,10 +19,6 @@
 #' \url{https://help.getharvest.com/api-v2}
 #'
 #' @importFrom magrittr %>%
-#' @importFrom dplyr bind_rows
-#' @importFrom purrr map
-#' @importFrom purrr map2
-#' @import httr
 #'
 #' @export
 #'

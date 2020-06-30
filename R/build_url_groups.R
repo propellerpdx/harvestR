@@ -9,8 +9,6 @@
 #'
 #' @author Mark Druffel, \email{mdruffel@propellerpdx.com}
 #'
-#' @importFrom dplyr if_else
-#'
 
 build_url_groups <- function(urls = NULL){
   request_groups <- NULL

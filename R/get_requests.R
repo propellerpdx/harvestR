@@ -18,10 +18,6 @@
 #' \url{https://rstudio.com/resources/rstudioconf-2020/parallel-computing-with-r-using-foreach-future-and-other-packages}
 #' \url{https://help.getharvest.com/api-v2/introduction/overview/general}
 #'
-#' @importFrom lubridate seconds
-#' @import furrr
-#' @import future
-#'
 
 get_requests <- function(urls = NULL,
                          group_name = NULL,

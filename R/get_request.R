@@ -23,9 +23,6 @@
 #' \url{https://curl.haxx.se/libcurl/c/CURLOPT_HTTP_VERSION.html}
 #'
 #' @importFrom magrittr %>%
-#' @importFrom glue glue
-#' @importFrom jsonlite fromJSON
-#' @import httr
 #'
 
 get_request <- function(url = NULL,
