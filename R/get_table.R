@@ -88,8 +88,8 @@ get_table <- function(
                                                                                                    verbose=verbose))
     # responses uses map2 around a future_map call so it creates another level of list.
     # Climb down the list and get the tables, then bind them all into a data frame
-    return_dfs <- purrr::map(responses, function(x)
-      purrr::map(x, function(y) y[table]) %>% dplyr::bind_rows()) %>%
+    return_dfs <-     purrr::map(responses, function(x)
+      purrr::map(x, function(y) y[[table]]) %>% dplyr::bind_rows()) %>%
       dplyr::bind_rows()
     # Add responses to the initial response
     return_df <- dplyr::bind_rows(return_df, return_dfs)
