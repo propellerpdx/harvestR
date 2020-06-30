@@ -2,7 +2,7 @@
 
 ## General features
 
-* `get_table()` gains new arguements to allow auto retries, parallel get requests, and more verbose messaging.
+* `get_table()` gains new arguments to allow auto retries, parallel get requests, and more verbose messaging.
 
 ## Executing get_table requests in parallel
 
