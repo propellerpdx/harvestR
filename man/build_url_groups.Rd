@@ -4,11 +4,9 @@
 \alias{build_url_groups}
 \title{Build url groups for get_requests}
 \usage{
-build_url_groups(urls = NULL, verbose = F)
+build_url_groups(urls = NULL)
 }
 \arguments{
-\item{verbose}{Logical scalar. Should the function provide verbose messaging back on each step?}
-
 \item{url}{Character vector of urls of the get request}
 }
 \value{
@@ -16,11 +14,6 @@ named list
 }
 \description{
 Harvest API v2 only accepts 100 urls every 15 seconds. build_url_groups breaks urls into groups of 100 naming the last group, "Last_Group". Groups run requests and then R sleeps for 15 seconds get requests to the Harvest API v2. The function is a wrapper around the httr::GET function and safely returns the httr result as result or error.
-}
-\references{
-\url{https://id.getharvest.com/developers},
-\url{https://help.getharvest.com/api-v2},
-\url{https://github.com/r-lib/httr}
 }
 \author{
 Mark Druffel, \email{mdruffel@propellerpdx.com}

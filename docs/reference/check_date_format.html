@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Harvest API v2 get request wrapper — get_table • harvestR</title>
+<title>Check date params for Harvest API v2 standards — check_date_format • harvestR</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,10 @@
 
 
 
-<meta property="og:title" content="Harvest API v2 get request wrapper — get_table" />
-<meta property="og:description" content="Submits get requests to the Harvest API v2. The function is a wrapper around the httr::GET function and returns the Harvest table." />
+<meta property="og:title" content="Check date params for Harvest API v2 standards — check_date_format" />
+<meta property="og:description" content="Harvest API v2 accepts a few date parameters which have strict requirements. Date parameters must
+be in `yyyy-mm-dd` format. `yyyy/mm/dd`, `mm-dd-yyyy`, `yyyy-m-d`,  etc. will result in failure.
+This function simply stops the user if they try an incorrect format." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -114,66 +116,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Harvest API v2 get request wrapper</h1>
+    <h1>Check date params for Harvest API v2 standards</h1>
     
-    <div class="hidden name"><code>get_table.Rd</code></div>
+    <div class="hidden name"><code>check_date_format.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Submits get requests to the Harvest API v2. The function is a wrapper around the httr::GET function and returns the Harvest table.</p>
+    <p>Harvest API v2 accepts a few date parameters which have strict requirements. Date parameters must
+be in `yyyy-mm-dd` format. `yyyy/mm/dd`, `mm-dd-yyyy`, `yyyy-m-d`,  etc. will result in failure.
+This function simply stops the user if they try an incorrect format.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_table</span>(
-  <span class='kw'>table</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>user</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>key</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>email</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>query</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>auto_retry</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"sequential"</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>check_date_format</span>(<span class='kw'>query</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>table</th>
-      <td><p>Character table name to be submitted to the Harvest API v2. Refer to <a href='https://help.getharvest.com/api-v2'>Harvest APIv2</a>.</p></td>
-    </tr>
-    <tr>
-      <th>user</th>
-      <td><p>Character account number (e.g. user = '12345') for authentication. Register at <a href='https://id.getharvest.com/developers'>Harvest Developers</a>.</p></td>
-    </tr>
-    <tr>
-      <th>key</th>
-      <td><p>Character key (e.g. key = 'Bearer &lt;secret key&gt;') for API authentication. Register at <a href='https://id.getharvest.com/developers'>Harvest Developers</a>.</p></td>
-    </tr>
-    <tr>
-      <th>email</th>
-      <td><p>Character email address for API call. (Optional)</p></td>
-    </tr>
-    <tr>
-      <th>strategy</th>
-      <td><p>Character vector passed to future::plan strategy parameter. Examples include 'sequential', 'multiprocess', &amp; 'multicore'.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Logical scalar. Should the function provide verbose messaging back on each step?</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><a href='https://id.getharvest.com/developers'>https://id.getharvest.com/developers</a>
-<a href='https://help.getharvest.com/api-v2'>https://help.getharvest.com/api-v2</a></p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples">
-<span class='no'>user_id</span> <span class='kw'>&lt;-</span> <span class='st'>'your_user_id'</span>
-<span class='no'>api_key</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>'Bearer '</span>,<span class='st'>'you_api_key'</span>)
-<span class='fu'>get_table</span>(<span class='kw'>table</span> <span class='kw'>=</span> <span class='st'>'projects'</span>, <span class='kw'>user</span> <span class='kw'>=</span> <span class='no'>user_id</span>,<span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>api_key</span>)
-<span class='fu'>get_table</span>(<span class='kw'>table</span> <span class='kw'>=</span> <span class='st'>'time_entries'</span> , <span class='kw'>user</span> <span class='kw'>=</span> <span class='no'>user_id</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>api_key</span>, <span class='kw'>email</span> <span class='kw'>=</span> <span class='st'>'your_email'</span>,<span class='kw'>query</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>'2018-01-01'</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>'2018-03-31'</span>))</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

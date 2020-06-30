@@ -11,7 +11,7 @@ get_table(
   email = "",
   query = NULL,
   auto_retry = FALSE,
-  strategy = NULL,
+  strategy = "sequential",
   verbose = FALSE
 )
 }

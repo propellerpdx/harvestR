@@ -45,7 +45,6 @@ get_requests <- function(urls = NULL,
   # Set plan for the execution
   future::plan(strategy = strategy)
 
-
   # Get Requests --------------------------------------------------------
 
   start_time <- Sys.time()

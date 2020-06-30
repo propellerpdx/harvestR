@@ -123,15 +123,11 @@
     <p>Harvest API v2 only accepts 100 urls every 15 seconds. build_url_groups breaks urls into groups of 100 naming the last group, "Last_Group". Groups run requests and then R sleeps for 15 seconds get requests to the Harvest API v2. The function is a wrapper around the httr::GET function and safely returns the httr result as result or error.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>build_url_groups</span>(<span class='kw'>urls</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
+    <pre class="usage"><span class='fu'>build_url_groups</span>(<span class='kw'>urls</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>verbose</th>
-      <td><p>Logical scalar. Should the function provide verbose messaging back on each step?</p></td>
-    </tr>
     <tr>
       <th>url</th>
       <td><p>Character vector of urls of the get request</p></td>
@@ -141,11 +137,6 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>named list</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p><a href='https://id.getharvest.com/developers'>https://id.getharvest.com/developers</a>,
-<a href='https://help.getharvest.com/api-v2'>https://help.getharvest.com/api-v2</a>,
-<a href='https://github.com/r-lib/httr'>https://github.com/r-lib/httr</a></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

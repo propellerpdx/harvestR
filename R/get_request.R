@@ -51,7 +51,7 @@ get_request <- function(url = NULL,
                                 httr::GET(url,
                                           httr::add_headers("Harvest-Account-ID" = user,
                                                             Authorization = key,
-                                                            'User-Agent=Propeller R API Helper (mdruffel@propellerpdx.com)',
+                                                            'User-Agent= R harvestR',
                                                             'From' = email)))
   if(verbose==T){
     message(glue::glue('{url} returned a status of {response$status_code}'))
@@ -59,7 +59,7 @@ get_request <- function(url = NULL,
   if(response$status_code==200){
     response_extract <- httr::content(response, as = "text", encoding = "UTF-8") %>%
       jsonlite::fromJSON(., flatten = T)
-    return(response_extract)
+    return(response_extract) # Do we need this?
   } else if (input_params$retry <= 2 & auto_retry == T) {
 
     # Error Handling ----------------------------------------------------------

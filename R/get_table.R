@@ -34,7 +34,7 @@ get_table <- function(
   email = '',
   query=NULL,
   auto_retry = FALSE,
-  strategy = NULL,
+  strategy = 'sequential',
   verbose=FALSE){
 
   # Setup Vars --------------------------------------------------------------
@@ -44,6 +44,10 @@ get_table <- function(
                      path=.,
                      query=query)
 
+
+  # Check Date Params Format ------------------------------------------------
+
+  harvestR:::check_date_format(query = query)
 
   # Get Request -------------------------------------------------------------
 
@@ -59,6 +63,9 @@ get_table <- function(
       message(glue::glue('Initial request shows {response$total_entries} records. Initiating the remaining {response$total_pages-1} requests.'))
     }
   }
+  if(is.null(response)){
+    stop('Initial request failed. See warning message for details:')
+  }
 
   # Get requests (multi-page) -----------------------------------------------
 
@@ -68,8 +75,7 @@ get_table <- function(
     # Build urls for the remaining requests
     urls <- purrr::map(2:response$total_pages, function(x) httr::modify_url(url, query = list(page = x)))
     # Build url groups by sets of 100 to avoid rate limiting by Harvest
-    url_groups <- harvestR:::build_url_groups(urls = urls,
-                                              verbose = verbose)
+    url_groups <- harvestR:::build_url_groups(urls = urls)
     # Pass url and the name of the url group,
     # last group is named 'Last_Group' which keeps get_requests from pausing if the last group finishes in less than 15 seconds
     responses <- purrr::map2(url_groups, names(url_groups), function(x, y) harvestR:::get_requests(urls = x,

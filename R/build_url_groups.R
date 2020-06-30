@@ -8,22 +8,17 @@
 #' @return named list
 #'
 #' @author Mark Druffel, \email{mdruffel@propellerpdx.com}
-#' @references
-#' \url{https://id.getharvest.com/developers},
-#' \url{https://help.getharvest.com/api-v2},
-#' \url{https://github.com/r-lib/httr}
 #'
 #' @importFrom dplyr if_else
 #'
 
-build_url_groups <- function(urls = NULL,
-                             verbose = F){
+build_url_groups <- function(urls = NULL){
   request_groups <- NULL
   for(i in 1:ceiling(length(urls) / 100)){
     # Calculates the position of the first url in the group
     start_url <- (i * 100) - 99
     # Calculates the position of the last url in the group
-    end_url <- min((((i + 1) * 100) - 100), length(urls))
+    end_url <- min(i * 100 , length(urls))
     # Last group needs a specific name to avoid rate limit timeout in get_requests()
     group_name <- dplyr::if_else(i*100 > length(urls), 'Last_Group', paste0('Group_',i))
     # Adds vector of urls into list
