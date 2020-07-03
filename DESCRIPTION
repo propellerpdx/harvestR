@@ -10,7 +10,9 @@ Imports:
   purrr,
   dplyr,
   naptime,
-  jsonlite
+  jsonlite,
+  furrr,
+  lubridate
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
