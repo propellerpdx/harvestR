@@ -1,4 +1,4 @@
-# harvestR <img src="man/figures/logo.png" align="right" />
+# harvestR <img src="man/figures/logo.png" align="right" height="125" width="125" />
 
 harvestR is provides tools for extracting data from the Harvest API v2. harvestR supports get statements only and provides a set of tools for parallel execution. 
 
