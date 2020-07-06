@@ -1,0 +1,8 @@
+title: harvestR
+url: https://propellerpdx.github.io/harvestR
+pkgdowndestination: docs
+template:
+  params:
+    bootswatch: flatly
+navbar:
+  type: inverse
