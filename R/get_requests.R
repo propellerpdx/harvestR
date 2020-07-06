@@ -25,8 +25,8 @@ get_requests <- function(urls = NULL,
                          key = NULL,
                          email = NULL,
                          verbose = F,
-                         auto_retry = NULL,
-                         strategy = NULL){
+                         auto_retry = FALSE,
+                         strategy = 'sequential'){
 
   # Setup Vars --------------------------------------------------------------
 
