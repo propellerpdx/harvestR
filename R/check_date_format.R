@@ -27,16 +27,16 @@ check_date_format <- function(query = NULL) {
           )
         }
 
-      # Coercsion Code ----------------------------------------------------------
-      #if(is.character(query[[i]][1])){
-      #  if(nchar(query[i])<11){
-      #    query[i] <- as.character(lubridate::as_date(query[[i]][1]))
-      #  }else if(nchar(query[i])>11){
-      #    stop(
-      #      glue::glue('{names(query[i])} = {query[i]} is not an accepted format for the parameter. Please refer to help file for more information.')
-      #    )
-      #  }
-      #}
+        # Coercsion Code ----------------------------------------------------------
+        #if(is.character(query[[i]][1])){
+        #  if(nchar(query[i])<11){
+        #    query[i] <- as.character(lubridate::as_date(query[[i]][1]))
+        #  }else if(nchar(query[i])>11){
+        #    stop(
+        #      glue::glue('{names(query[i])} = {query[i]} is not an accepted format for the parameter. Please refer to help file for more information.')
+        #    )
+        #  }
+        #}
       }
     }
   }

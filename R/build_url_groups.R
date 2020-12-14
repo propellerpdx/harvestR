@@ -10,7 +10,12 @@
 #' @author Mark Druffel, \email{mdruffel@propellerpdx.com}
 #'
 
-build_url_groups <- function(urls = NULL){
+build_url_groups <- function(urls = NULL,
+                             ...){
+
+  input_params <- list(...)
+  if(is.null(input_params$quiet)) input_params$quiet <- TRUE
+
   request_groups <- NULL
   for(i in 1:ceiling(length(urls) / 100)){
     # Calculates the position of the first url in the group
@@ -21,7 +26,7 @@ build_url_groups <- function(urls = NULL){
     group_name <- dplyr::if_else(i*100 > length(urls), 'Last_Group', paste0('Group_',i))
     # Adds vector of urls into list
     request_groups[[group_name]] <- urls[start_url:end_url]
+    if(!input_params$quiet) message(glue::glue('Group {group_name} starts with page {start_url + 1} and ends with page {end_url + 1}'))
   }
   return(request_groups)
 }
-
