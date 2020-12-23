@@ -87,7 +87,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,7 +99,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/propellerpdx/harvestR/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -114,15 +119,55 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      
+      <small>Source: <a href='https://github.com/propellerpdx/harvestR/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="harvesr-100" class="section level1">
-<h1 class="page-header" data-toc-text="1.0.0">
-<a href="#harvesr-100" class="anchor"></a>harvesR 1.0.0</h1>
+    <div id="harvestr-110" class="section level1">
+<h1 class="page-header" data-toc-text="1.1.0">
+<a href="#harvestr-110" class="anchor"></a>harvestR 1.1.0</h1>
 <div id="general-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#general-features" class="anchor"></a>General features</h2>
+<ul>
+<li>Added messaging to <code><a href="../reference/get_table.html">get_table()</a></code> to address verbose output issue.</li>
+<li>The strategy &amp; verbose parameters are deprecated and replaced by plan_options and quiet, respectively.</li>
+<li>Added credential management workflow, special thanks to <a href="https://github.com/joethorley">joethorley</a> for suggesting the idea - sorry for the long wait!</li>
+</ul>
+</div>
+<div id="messaging" class="section level2">
+<h2 class="hasAnchor">
+<a href="#messaging" class="anchor"></a>Messaging</h2>
+<ul>
+<li>Implementing parallel requests in <code><a href="../reference/get_table.html">get_table()</a></code> broke verbose output. The future package has a <a href="https://cran.r-project.org/web/packages/future/vignettes/future-2-output.html">known limitation</a> with messaging across parallel threads.</li>
+<li>The <code>verbose</code> parameter was passed to httr to provide verbose messaging on each get request, but messages in any parallel threads are dropped even when using <code><a href="https://rdrr.io/r/base/sink.html">sink()</a></code>.</li>
+<li>To enable logging for data pipelines, we added custom messages inside the <code><a href="../reference/get_table.html">get_table()</a></code> function which can be triggered by setting <code>quiet = FALSE</code>.</li>
+</ul>
+</div>
+<div id="parameter-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#parameter-changes" class="anchor"></a>Parameter changes</h2>
+<ul>
+<li>The <code>verbose</code> parameter is deprecated because it does not work on parallel threads. The new <code>quiet</code> is a non-standard replacement.</li>
+<li>The <code>strategy</code> parameter is deprecated in favor of plan_options. The <code>strategy</code> parameter was passed to <code><a href="https://rdrr.io/pkg/future/man/plan.html">future::plan()</a></code>, but did not allow users to modify any other parameters inside <code><a href="https://rdrr.io/pkg/future/man/plan.html">future::plan()</a></code>. The new <code>plan_options</code> parameter allows users to pass any parameters into <code><a href="https://rdrr.io/pkg/future/man/plan.html">future::plan()</a></code> in a named list.<br>
+</li>
+<li>A few parameters are now listed inside <code>...</code> This change does not impact users outside of the vignettes, but it allows us to make changes in the future with less risk of breaking changes.</li>
+</ul>
+</div>
+<div id="credential-management" class="section level2">
+<h2 class="hasAnchor">
+<a href="#credential-management" class="anchor"></a>Credential Management</h2>
+<ul>
+<li>New functions that allow interactive users to securely save credentials on their system using the <a href="https://github.com/r-lib/keyring">keyring</a> package.</li>
+<li>Refer to package readme for more information or refer to the <code><a href="../reference/create_harvest_creds.html">create_harvest_creds()</a></code> function to get started.</li>
+</ul>
+</div>
+</div>
+    <div id="harvestr-100" class="section level1">
+<h1 class="page-header" data-toc-text="1.0.0">
+<a href="#harvestr-100" class="anchor"></a>harvestR 1.0.0</h1>
+<div id="general-features-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#general-features-1" class="anchor"></a>General features</h2>
 <ul>
 <li>
 <code><a href="../reference/get_table.html">get_table()</a></code> gains new arguments to allow auto retries, parallel get requests, and more verbose messaging.</li>
@@ -160,7 +205,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

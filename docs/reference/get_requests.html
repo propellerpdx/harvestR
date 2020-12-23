@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +100,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/propellerpdx/harvestR/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -115,7 +120,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Execute multiple get_request calls</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/propellerpdx/harvestR/blob/master/R/get_request.R'><code>R/get_request.R</code></a></small>
     <div class="hidden name"><code>get_requests.Rd</code></div>
     </div>
 
@@ -123,16 +128,7 @@
     <p>Submits multiple get requests to the Harvest API v2. Supports parallel execution through furrr &amp; the future package.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_requests</span>(
-  <span class='kw'>urls</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>group_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>user</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>key</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>email</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='no'>F</span>,
-  <span class='kw'>auto_retry</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>strategy</span> <span class='kw'>=</span> <span class='st'>"sequential"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>get_requests</span><span class='op'>(</span><span class='va'>urls</span>, <span class='va'>group_name</span>, <span class='va'>table</span>, <span class='va'>user</span>, <span class='va'>key</span>, email <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,6 +136,10 @@
     <tr>
       <th>urls</th>
       <td><p>Named list of character vectors of urls in groups from build_url_groups function.</p></td>
+    </tr>
+    <tr>
+      <th>table</th>
+      <td><p>Character table name to be submitted to the Harvest API v2. Refer to <a href='https://help.getharvest.com/api-v2'>Harvest API v2</a>.</p></td>
     </tr>
     <tr>
       <th>user</th>
@@ -154,28 +154,26 @@
       <td><p>Character email address for API call. (Optional)</p></td>
     </tr>
     <tr>
-      <th>verbose</th>
-      <td><p>Logical scalar. Should the function provide verbose messaging back on each step?</p></td>
-    </tr>
-    <tr>
-      <th>strategy</th>
-      <td><p>Character vector passed to future::plan strategy parameter. Examples include 'sequential', 'multiprocess', &amp; 'multicore'.</p></td>
+      <th>...</th>
+      <td><p>Additional arguments, potentially passed to other functions - see details in <a href='get_table.html'>get_table</a></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>named list</p>
+    <p>named list of contents of API responses for specified group of URLs</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><a href='https://github.com/HenrikBengtsson/future'>https://github.com/HenrikBengtsson/future</a>
-<a href='https://davisvaughan.github.io/furrr'>https://davisvaughan.github.io/furrr</a>
-<a href='https://rstudio.com/resources/rstudioconf-2020/parallel-computing-with-r-using-foreach-future-and-other-packages'>https://rstudio.com/resources/rstudioconf-2020/parallel-computing-with-r-using-foreach-future-and-other-packages</a>
+    <p><a href='https://github.com/HenrikBengtsson/future'>https://github.com/HenrikBengtsson/future</a> <br />
+<a href='https://davisvaughan.github.io/furrr'>https://davisvaughan.github.io/furrr</a> <br />
+<a href='https://rstudio.com/resources/rstudioconf-2020/parallel-computing-with-r-using-foreach-future-and-other-packages'>https://rstudio.com/resources/rstudioconf-2020/parallel-computing-with-r-using-foreach-future-and-other-packages</a> <br />
 <a href='https://help.getharvest.com/api-v2/introduction/overview/general'>https://help.getharvest.com/api-v2/introduction/overview/general</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>[future::plan()] for details regarding how to implement parallel api calls</p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -191,7 +189,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
