@@ -4,15 +4,7 @@
 \alias{get_request}
 \title{Harvest API v2 get request wrapper}
 \usage{
-get_request(
-  url = NULL,
-  user = NULL,
-  key = NULL,
-  email = NULL,
-  auto_retry = F,
-  verbose = F,
-  ...
-)
+get_request(url = NULL, user = NULL, key = NULL, email = NULL, ...)
 }
 \arguments{
 \item{url}{Character url of the get request.}
@@ -23,27 +15,29 @@ get_request(
 
 \item{email}{Character email address for API call. (Optional)}
 
-\item{verbose}{Logical scalar. Should the function provide verbose messaging back on each step?}
-
-\item{...}{Internally used to indicated that the call is a retry.}
+\item{...}{Additional arguments, potentially passed to other functions - see details in \link[harvestR]{get_table}}
 }
 \value{
-response object
+contents of the API response
 }
 \description{
 Submits get requests to the Harvest API v2 with retry functionality.
 Errors are messaged to the execution environment and set to NULL allowing user-facing function returns to provide data frame output.
 }
 \examples{
-
+\dontrun{
+get_request(url = 'https://api.harvestapp.com/v2/projects',
+            user = user_id,
+            key = api_key,
+            email = 'your_email'
+            auto_retry = F,
+            quiet = T)
+}
 
 }
 \references{
-\url{https://id.getharvest.com/developers}
-\url{https://help.getharvest.com/api-v2}
-\url{https://github.com/r-lib/httr}
-\url{https://curl.haxx.se/libcurl/c/CURLOPT_HTTP_VERSION.html}
-}
-\author{
-Mark Druffel, \email{mdruffel@propellerpdx.com}
+Set up your \href{https://id.getharvest.com/developers}{API key}
+Read the Harvest API v2 \href{https://help.getharvest.com/api-v2}{documentation}
+Read the httr \href{https://github.com/r-lib/httr}{documentation}
+Refer to curl \href{https://github.com/curl/curl/blob/master/include/curl/curl.h}{documentation} for more http_version options
 }

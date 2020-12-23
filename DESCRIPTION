@@ -1,21 +1,49 @@
 Package: harvestR
 Title: Utility functions for interacting with the Harvest API
 Version: 1.0.0
-Authors@R: person("Mark", "Druffel", email = "mdruffel@propellerpdx.com", role = c("aut", "cre"))
-Description: Provides utility functions for interacting with the Harvest time tracking system API v2. 
-Depends: R (>= 3.4.3)
-Imports:
-  httr,
-  magrittr,
-  purrr,
-  dplyr,
-  naptime,
-  jsonlite,
-  furrr,
-  lubridate
+Authors@R: 
+    c(person(given = "Mark",
+             family = "Druffel",
+             role = c("aut", "cre"),
+             email = "mark.druffel@gmail.com"),
+      person(given = "Kyle",
+             family = "Crawford",
+             role = "ctb",
+             email = "kyle.s.crawford@gmail.com"),
+      person(given = "Propeller Consulting",
+             role = "cph"),
+      person(given = "Chris",
+             family = "Fry",
+             role = "ctb"),
+      person(given = "Joe",
+             family = "Thorley",
+             role = "ctb"))
+Description: Provides utility functions for interacting with the
+    Harvest time tracking system API v2.
 License: GPL-3
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.1.0
+BugReports: https://github.com/propellerpdx/harvestR/issues
+Depends: 
+    R (>= 3.4.3)
+Imports:
+    assertthat,
+    curl,
+    dplyr,
+    furrr,
+    future,
+    getPass,
+    glue,
+    httr,
+    jsonlite,
+    keyring,
+    lifecycle,
+    lubridate,
+    magrittr,
+    purrr,
+    rlang
 Suggests: 
     testthat
+RdMacros: 
+    lifecycle
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1

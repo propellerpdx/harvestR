@@ -6,43 +6,63 @@
 \usage{
 get_table(
   table = NULL,
-  user = NULL,
-  key = NULL,
+  user = harvestR::get_harvest_account(),
+  key = harvestR::get_harvest_pat(),
   email = "",
   query = NULL,
-  auto_retry = FALSE,
-  strategy = "sequential",
-  verbose = FALSE
+  ...,
+  verbose = lifecycle::deprecated(),
+  strategy = lifecycle::deprecated()
 )
 }
 \arguments{
-\item{table}{Character table name to be submitted to the Harvest API v2. Refer to \href{https://help.getharvest.com/api-v2}{Harvest APIv2}.}
+\item{table}{Character table name to be submitted to the Harvest API v2. Refer to \href{https://help.getharvest.com/api-v2}{Harvest API v2}.}
 
-\item{user}{Character account number (e.g. user = '12345') for authentication. Register at \href{https://id.getharvest.com/developers}{Harvest Developers}.}
+\item{user}{Character account number (e.g. user = '12345') for authentication. Register at \href{https://id.getharvest.com/developers}{Harvest Developers}. Defaults to `get_harvest_account()`}
 
-\item{key}{Character key (e.g. key = 'Bearer <secret key>') for API authentication. Register at \href{https://id.getharvest.com/developers}{Harvest Developers}.}
+\item{key}{Character key (e.g. key = 'Bearer <secret key>') for API authentication. Register at \href{https://id.getharvest.com/developers}{Harvest Developers}. Defaults to `get_harvest_pat()`}
 
 \item{email}{Character email address for API call. (Optional)}
 
-\item{strategy}{Character vector passed to future::plan strategy parameter. Examples include 'sequential', 'multiprocess', & 'multicore'.}
-
-\item{verbose}{Logical scalar. Should the function provide verbose messaging back on each step?}
+\item{...}{Additional arguments, some are forwarded to other functions - see details.}
+}
+\value{
+dataframe with contents of requested Harvest table
 }
 \description{
 Submits get requests to the Harvest API v2. The function is a wrapper around the httr::GET function and returns the Harvest table.
 }
-\examples{
+\details{
+\lifecycle{maturing}
 
-user_id <- 'your_user_id'
-api_key <- paste0('Bearer ','you_api_key')
-get_table(table = 'projects', user = user_id,key = api_key)
-get_table(table = 'time_entries' , user = user_id, key = api_key, email = 'your_email',query = list(from = '2018-01-01', to = '2018-03-31'))
+
+Description of ... parameters
+\itemize{
+   \item \code{auto_retry} Logical; control whether to retry GET requests upon failure. TRUE results 2 retries (3 attempts total). FALSE results in no retries (1 attempt total).
+   \item \code{quiet} Logical; controls messaging. TRUE will result in displaying only errors in the console. FALSE will results in displaying messages, warnings, and errors. Depending on execution strategy, messages from httr::GET may not be surfaced to the console due to multiple R sessions running and stderror relaying issues. See \href{https://cran.r-project.org/web/packages/future/vignettes/future-2-output.html}{Future Package Output} for me details.
+   \item \code{plan_options} List; list of parameters passed to \code{future::plan}. The strategy parameter is required to implement parallel requests, see \href{https://cran.r-project.org/web/packages/future/vignettes/future-1-overview.html}{Future Package Overview} for more details.
+   }
+}
+\examples{
+\dontrun{
+create_harvest_creds()
+set_harvest_creds()
+get_table(table = 'projects')
+get_table(table = 'time_entries',
+          email = 'your_email',
+          query = list(from = '2018-01-01', to = '2018-12-31'),
+          plan_options = list(strategy = "multicore"),
+          auto_retry = T,
+          quiet = T)
+}
 
 }
 \references{
-\url{https://id.getharvest.com/developers}
-\url{https://help.getharvest.com/api-v2}
+\href{https://help.getharvest.com/api-v2}{Harvest API v2}
+\href{https://id.getharvest.com/developers}{Harvest Developers Page}
+\href{https://cran.r-project.org/web/packages/future/vignettes/future-1-overview.html}{Future Pacakge Overview}
+\href{https://cran.r-project.org/web/packages/future/vignettes/future-2-output.html}{Future Package Output}
 }
-\author{
-Mark Druffel, \email{mdruffel@propellerpdx.com}
+\seealso{
+`future::plan()` for more detail regarding how to implement parallel api calls
 }
