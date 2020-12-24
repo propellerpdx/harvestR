@@ -2,11 +2,13 @@
 % Please edit documentation in R/auth.R
 \name{get_harvest_account}
 \alias{get_harvest_account}
-\title{\lifecycle{experimental}
- @title Get Harvest account ID from system environment variables}
+\title{Get Harvest account ID from system environment variables}
 \usage{
 get_harvest_account()
 }
 \description{
 Retrieve the harvestR account ID from system environment variables under the default alias HARVEST_ACCOUNT_ID
+}
+\details{
+\lifecycle{experimental}
 }

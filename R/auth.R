@@ -1,5 +1,5 @@
 #' \lifecycle{experimental}
-#'  @title Get Harvest account ID from system environment variables
+#' @title Get Harvest account ID from system environment variables
 #' @description Retrieve the harvestR account ID from system environment variables under the default alias HARVEST_ACCOUNT_ID
 #'
 #' @importFrom assertthat assert_that
