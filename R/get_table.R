@@ -133,15 +133,20 @@ get_table <- function(table = NULL,
     # Get requests ------------------------------------------------------------
     # Pass url and the name of the url group,
     # last group is named 'Last_Group' which keeps get_requests from pausing if the last group finishes in less than 15 seconds
-    responses_df <- purrr::map2(url_groups, names(url_groups), function(x, y) harvestR:::get_requests(urls = x,
+    responses <- purrr::map2(url_groups, names(url_groups), function(x, y) harvestR:::get_requests(urls = x,
                                                                                                       group_name = y,
                                                                                                       user = user,
                                                                                                       key = key,
                                                                                                       email = email,
                                                                                                       table = table,
                                                                                                       auto_retry = input_params$auto_retry,
-                                                                                                      quiet = input_params$quiet)) %>%
+                                                                                                      quiet = input_params$quiet))
+    responses_df <- purrr::map(responses, function(x){
+      purrr::map(x, function(y) y[table]) %>%
+        dplyr::bind_rows()
+      }) %>%
       dplyr::bind_rows()
+
     # Reset execution plan to default
     future::plan("default")
     # Add responses to the initial response

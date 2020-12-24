@@ -139,14 +139,12 @@ get_requests <- function(urls,
                                                                           auto_retry = input_params$auto_retry,
                                                                           quiet = input_params$quiet,
                                                                           table = table))
-  contents <- purrr::map(table) %>%
-    dplyr::bind_rows()
   end_time <- Sys.time()
   time <- lubridate::seconds(end_time - start_time)
   if(time < 15 & group_name != 'Last_Group'){
     Sys.sleep(15 - time)
   }
-  return(contents)
+  return(responses)
 }
 
 #' Get Response Messages
