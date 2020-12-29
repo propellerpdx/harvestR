@@ -39,7 +39,8 @@ Imports:
     lubridate,
     magrittr,
     purrr,
-    rlang
+    rlang,
+    ratelimitr
 Suggests: 
     testthat
 RdMacros: 
