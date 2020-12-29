@@ -4,7 +4,7 @@
 \alias{get_request}
 \title{Harvest API v2 get request wrapper}
 \usage{
-get_request(url = NULL, user = NULL, key = NULL, email = NULL, ...)
+get_request(url = NULL, user = NULL, key = NULL, ...)
 }
 \arguments{
 \item{url}{Character url of the get request.}
@@ -12,8 +12,6 @@ get_request(url = NULL, user = NULL, key = NULL, email = NULL, ...)
 \item{user}{Character account number (e.g. user = '12345') for authentication. Register at \href{https://id.getharvest.com/developers}{Harvest Developers}.}
 
 \item{key}{Character key (e.g. key = 'Bearer <secret key>') for API authentication. Register at \href{https://id.getharvest.com/developers}{Harvest Developers}.}
-
-\item{email}{Character email address for API call. (Optional)}
 
 \item{...}{Additional arguments, potentially passed to other functions - see details in \link[harvestR]{get_table}}
 }
@@ -23,17 +21,6 @@ contents of the API response
 \description{
 Submits get requests to the Harvest API v2 with retry functionality.
 Errors are messaged to the execution environment and set to NULL allowing user-facing function returns to provide data frame output.
-}
-\examples{
-\dontrun{
-get_request(url = 'https://api.harvestapp.com/v2/projects',
-            user = user_id,
-            key = api_key,
-            email = 'your_email'
-            auto_retry = F,
-            quiet = T)
-}
-
 }
 \references{
 Set up your \href{https://id.getharvest.com/developers}{API key}

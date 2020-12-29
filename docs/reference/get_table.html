@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Harvest API v2 get request wrapper — get_table" />
-<meta property="og:description" content="Submits get requests to the Harvest API v2. The function is a wrapper around the httr::GET function and returns the Harvest table." />
+<meta property="og:description" content="Submits get requests to the Harvest API v2 with options configured for authentication, parallelism, and logging" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">harvestR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -125,16 +125,19 @@
     </div>
 
     <div class="ref-description">
-    <p>Submits get requests to the Harvest API v2. The function is a wrapper around the httr::GET function and returns the Harvest table.</p>
+    <p>Submits get requests to the Harvest API v2 with options configured for authentication, parallelism, and logging</p>
     </div>
 
     <pre class="usage"><span class='fu'>get_table</span><span class='op'>(</span>
   table <span class='op'>=</span> <span class='cn'>NULL</span>,
   user <span class='op'>=</span> <span class='fu'>harvestR</span><span class='fu'>::</span><span class='fu'><a href='get_harvest_account.html'>get_harvest_account</a></span><span class='op'>(</span><span class='op'>)</span>,
   key <span class='op'>=</span> <span class='fu'>harvestR</span><span class='fu'>::</span><span class='fu'><a href='get_harvest_pat.html'>get_harvest_pat</a></span><span class='op'>(</span><span class='op'>)</span>,
-  email <span class='op'>=</span> <span class='st'>""</span>,
   query <span class='op'>=</span> <span class='cn'>NULL</span>,
+  plan_options <span class='op'>=</span> <span class='cn'>NULL</span>,
+  quiet <span class='op'>=</span> <span class='cn'>T</span>,
   <span class='va'>...</span>,
+  auto_retry <span class='op'>=</span> <span class='fu'>lifecycle</span><span class='fu'>::</span><span class='fu'><a href='https://lifecycle.r-lib.org/reference/deprecated.html'>deprecated</a></span><span class='op'>(</span><span class='op'>)</span>,
+  email <span class='op'>=</span> <span class='fu'>lifecycle</span><span class='fu'>::</span><span class='fu'><a href='https://lifecycle.r-lib.org/reference/deprecated.html'>deprecated</a></span><span class='op'>(</span><span class='op'>)</span>,
   verbose <span class='op'>=</span> <span class='fu'>lifecycle</span><span class='fu'>::</span><span class='fu'><a href='https://lifecycle.r-lib.org/reference/deprecated.html'>deprecated</a></span><span class='op'>(</span><span class='op'>)</span>,
   strategy <span class='op'>=</span> <span class='fu'>lifecycle</span><span class='fu'>::</span><span class='fu'><a href='https://lifecycle.r-lib.org/reference/deprecated.html'>deprecated</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
@@ -155,12 +158,16 @@
       <td><p>Character key (e.g. key = 'Bearer &lt;secret key&gt;') for API authentication. Register at <a href='https://id.getharvest.com/developers'>Harvest Developers</a>. Defaults to `get_harvest_pat()`</p></td>
     </tr>
     <tr>
-      <th>email</th>
-      <td><p>Character email address for API call. (Optional)</p></td>
+      <th>plan_options</th>
+      <td><p>List; list of parameters passed to <code><a href='https://rdrr.io/pkg/future/man/plan.html'>future::plan</a></code>. The strategy parameter is required to implement parallel requests, see <a href='https://cran.r-project.org/web/packages/future/vignettes/future-1-overview.html'>Future Package Overview</a> for more details.</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>Logical; controls harvestR messaging, TRUE returns only errors in the console and FALSE returns messages, warnings, and errors. Does not impact deprecation warnings.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments, some are forwarded to other functions - see details.</p></td>
+      <td><p>Additional arguments forwarded to `httr::RETRY()` and `httr::config()`. Refer to details for more information.</p></td>
     </tr>
     </table>
 
@@ -171,36 +178,50 @@
 
     <p><a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a></p>
 
-<p>Description of ... parameters</p><ul>
-<li><p><code>auto_retry</code> Logical; control whether to retry GET requests upon failure. TRUE results 2 retries (3 attempts total). FALSE results in no retries (1 attempt total).</p></li>
-<li><p><code>quiet</code> Logical; controls messaging. TRUE will result in displaying only errors in the console. FALSE will results in displaying messages, warnings, and errors. Depending on execution strategy, messages from httr::GET may not be surfaced to the console due to multiple R sessions running and stderror relaying issues. See <a href='https://cran.r-project.org/web/packages/future/vignettes/future-2-output.html'>Future Package Output</a> for me details.</p></li>
-<li><p><code>plan_options</code> List; list of parameters passed to <code><a href='https://rdrr.io/pkg/future/man/plan.html'>future::plan</a></code>. The strategy parameter is required to implement parallel requests, see <a href='https://cran.r-project.org/web/packages/future/vignettes/future-1-overview.html'>Future Package Overview</a> for more details.</p></li>
+<p>Description of ... parameters. Additional arguments are forwarded to config.</p><ul>
+<li><p><code>times</code> integer; Forwarded to RETRY, maximum number of requests to attempt. Defaults to 3.</p></li>
+<li><p><code>token</code> httr-token; Forwarded to config, an OAuth token (1.0 or 2.0).</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p><a href='https://help.getharvest.com/api-v2'>Harvest API v2</a>
-<a href='https://id.getharvest.com/developers'>Harvest Developers Page</a>
-<a href='https://cran.r-project.org/web/packages/future/vignettes/future-1-overview.html'>Future Pacakge Overview</a>
+<a href='https://id.getharvest.com/developers'>Harvest Developers Page</a>,
+<a href='https://cran.r-project.org/web/packages/future/vignettes/future-1-overview.html'>Future Pacakge Overview</a>,
 <a href='https://cran.r-project.org/web/packages/future/vignettes/future-2-output.html'>Future Package Output</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>`future::plan()` for more detail regarding how to implement parallel api calls</p></div>
+    <div class='dont-index'><p>`future::plan()` for more detail regarding how to implement parallel api calls</p>
+<p>`httr::httr_options()` for more detail regarding httr configurations</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+
+<span class='co'># Create a credentials record on the system keyring</span>
 <span class='fu'><a href='create_harvest_creds.html'>create_harvest_creds</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='co'># Set the credentials in the environment for get_table</span>
 <span class='fu'><a href='set_harvest_creds.html'>set_harvest_creds</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='fu'>get_table</span><span class='op'>(</span>table <span class='op'>=</span> <span class='st'>'projects'</span><span class='op'>)</span>
-<span class='fu'>get_table</span><span class='op'>(</span>table <span class='op'>=</span> <span class='st'>'time_entries'</span>,
-          email <span class='op'>=</span> <span class='st'>'your_email'</span>,
-          query <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>from <span class='op'>=</span> <span class='st'>'2018-01-01'</span>, to <span class='op'>=</span> <span class='st'>'2018-12-31'</span><span class='op'>)</span>,
-          plan_options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>strategy <span class='op'>=</span> <span class='st'>"multicore"</span><span class='op'>)</span>,
-          auto_retry <span class='op'>=</span> <span class='cn'>T</span>,
-          quiet <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>
+
+<span class='co'># Barebones call to get_table</span>
+<span class='va'>projects</span> <span class='op'>&lt;-</span> <span class='fu'>get_table</span><span class='op'>(</span>table <span class='op'>=</span> <span class='st'>'projects'</span><span class='op'>)</span>
+
+<span class='co'># Parallel request with 2 retries and messaging</span>
+<span class='co'># Windows users should use multisession, multicore will not work</span>
+<span class='va'>time_entries</span> <span class='op'>&lt;-</span> <span class='fu'>get_table</span><span class='op'>(</span>table <span class='op'>=</span> <span class='st'>'time_entries'</span>,
+query <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>from <span class='op'>=</span> <span class='st'>'2018-01-01'</span>, to <span class='op'>=</span> <span class='st'>'2018-12-31'</span><span class='op'>)</span>,
+plan_options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>strategy <span class='op'>=</span> <span class='st'>"multicore"</span><span class='op'>)</span>,
+times <span class='op'>=</span> <span class='fl'>2</span>,
+quiet <span class='op'>=</span> <span class='cn'>F</span><span class='op'>)</span>
+
+<span class='co'># Request using an httr option (see `httr::httr_options()`) and an oauth token</span>
+<span class='va'>projects</span> <span class='op'>&lt;-</span> <span class='fu'>get_table</span><span class='op'>(</span>table <span class='op'>=</span> <span class='st'>'projects'</span>,
+http_version <span class='op'>=</span> <span class='fl'>2</span>,
+token <span class='op'>=</span> <span class='va'>my_token</span><span class='op'>)</span>
+
 <span class='op'>}</span>
 
-</pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

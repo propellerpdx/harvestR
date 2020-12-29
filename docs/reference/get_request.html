@@ -81,7 +81,7 @@ Errors are messaged to the execution environment and set to NULL allowing user-f
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">harvestR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -130,7 +130,7 @@ Errors are messaged to the execution environment and set to NULL allowing user-f
 Errors are messaged to the execution environment and set to NULL allowing user-facing function returns to provide data frame output.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_request</span><span class='op'>(</span>url <span class='op'>=</span> <span class='cn'>NULL</span>, user <span class='op'>=</span> <span class='cn'>NULL</span>, key <span class='op'>=</span> <span class='cn'>NULL</span>, email <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_request</span><span class='op'>(</span>url <span class='op'>=</span> <span class='cn'>NULL</span>, user <span class='op'>=</span> <span class='cn'>NULL</span>, key <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,10 +148,6 @@ Errors are messaged to the execution environment and set to NULL allowing user-f
       <td><p>Character key (e.g. key = 'Bearer &lt;secret key&gt;') for API authentication. Register at <a href='https://id.getharvest.com/developers'>Harvest Developers</a>.</p></td>
     </tr>
     <tr>
-      <th>email</th>
-      <td><p>Character email address for API call. (Optional)</p></td>
-    </tr>
-    <tr>
       <th>...</th>
       <td><p>Additional arguments, potentially passed to other functions - see details in <a href='get_table.html'>get_table</a></p></td>
     </tr>
@@ -167,8 +163,6 @@ Read the Harvest API v2 <a href='https://help.getharvest.com/api-v2'>documentati
 Read the httr <a href='https://github.com/r-lib/httr'>documentation</a>
 Refer to curl <a href='https://github.com/curl/curl/blob/master/include/curl/curl.h'>documentation</a> for more http_version options</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

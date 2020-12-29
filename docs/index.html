@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">harvestR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -81,33 +81,44 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#harvestr-" class="anchor"></a>harvestR <img src="reference/figures/logo.png" align="right" height="125" width="125">
 </h1></div>
-<p>harvestR is provides tools for extracting data from the Harvest API v2. harvestR supports get statements only and provides a set of tools for parallel execution.</p>
+<p>harvestR is a get wrapper to extract tables from the Harvest API v2.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>harvestR will not be submitted to CRAN given the numerous dependencies including the Harvest API. The library can be installed from github.</p>
+<p>To install harvestR run the following:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"propellerpdx/harvestR"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="credentials" class="section level2">
 <h2 class="hasAnchor">
 <a href="#credentials" class="anchor"></a>Credentials</h2>
-<p>Harvest requires an account ID and personal access token to make API calls which can be found <a href="https://id.getharvest.com/developers">here</a> when logged in. Once the user has obtained those credentials, they can manage them using any credential management tool of their choice and pass them into harvestR functions with the parameters <code>user</code> and <code>key</code>. For example, the user can bypass the defaults in <code><a href="reference/get_table.html">get_table()</a></code> by running the below code.</p>
+<p>Harvest requires credentials to make any API requests. Harvest supports personal access tokens and oauth2, for more info refer to <a href="https://help.getharvest.com/api-v2/authentication-api/authentication/authentication/">Harvest</a>.</p>
+<div id="pat" class="section level3">
+<h3 class="hasAnchor">
+<a href="#pat" class="anchor"></a>PAT</h3>
+<p>To authenticate using a personal access token, you need an account ID and personal access token which can be obtained <a href="https://id.getharvest.com/developers">here</a>. The user account is shared by all users in that account and personal access token is specific to the user. These credentials can be used in <code><a href="reference/get_table.html">get_table()</a></code> by passing them to the <code>user</code> and <code>key</code> parameters.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>projects &lt;-<span class="st"> </span><span class="kw">get_table</span>(<span class="dt">table =</span> <span class="st">'projects'</span>, <span class="dt">user =</span> <span class="st">'not_a_real_account'</span>, key <span class="st">'Bearer fake_personal_access_token'</span>)</span></code></pre></div>
-<p>Users can also use harvestR to manage their credentials using the <a href="https://github.com/r-lib/keyring">keyring</a> package. To do so run the below code and add the account ID and personal access tokens in the prompts:</p>
+<p><strong>Note:</strong> you must add <code>Bearer</code> including the space to your personal access token in order for it to work. This is a <a href="https://help.getharvest.com/api-v2/authentication-api/authentication/authentication/">Harvest requirement</a>.</p>
+<p>harvestR provides functions for users to manage their credentials using the <a href="https://github.com/r-lib/keyring">keyring</a> package. This allows users to avoid storing secrets in their code and allows them to keep from retyping them every time they make a call. To do so run the below code and add the account ID and personal access tokens in the prompts:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">harvestR</span><span class="fu">::</span><span class="fu"><a href="reference/create_harvest_creds.html">create_harvest_creds</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><strong>Note: you must add <code>Bearer</code> including the space to your personal access token in order for it to work. This is a <a href="https://help.getharvest.com/api-v2/authentication-api/authentication/authentication/">Harvest requirement</a>.</strong></p>
+<code class="sourceCode R"><span class="fu"><a href="reference/create_harvest_creds.html">create_harvest_creds</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p><strong>Note:</strong> you must add <code>Bearer</code> including the space to your personal access token in order for it to work. This is a <a href="https://help.getharvest.com/api-v2/authentication-api/authentication/authentication/">Harvest requirement</a>.</p>
 <p>Once the credentials are created, they are saved on the system keyring so they can be accessed in future interactive R sessions. By running the below code harvestR will automatically find your credentials when running <code><a href="reference/get_table.html">get_table()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">harvestR</span><span class="fu">::</span><span class="fu"><a href="reference/set_harvest_creds.html">set_harvest_creds</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>If at any point you need to update your token, you can call <code><a href="reference/create_harvest_creds.html">create_harvest_creds()</a></code> again - it will delete the old credentials once you have provided the new ones. If you want to delete the credentials from your keyring and not add new ones, run the below code.</p>
+<code class="sourceCode R"><span class="fu"><a href="reference/set_harvest_creds.html">set_harvest_creds</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p>If at any point you need to update your token, you can call <code><a href="reference/create_harvest_creds.html">create_harvest_creds()</a></code> again - it will delete the old credentials once you have provided the new ones. If you want to delete the credentials from your keyring and not add new ones, run <code><a href="reference/delete_harvest_creds.html">harvestR::delete_harvest_creds()</a></code>.</p>
+</div>
+<div id="oauth" class="section level3">
+<h3 class="hasAnchor">
+<a href="#oauth" class="anchor"></a>Oauth</h3>
+<p>If users require oath support, tokens can passed <code><a href="reference/get_table.html">get_table()</a></code> as a parameter <code>token</code>. Tokens are forwarded to <code><a href="https://httr.r-lib.org/reference/config.html">httr::config</a></code>. This functionality has not been tested as of this release.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">harvestR</span><span class="fu">::</span><span class="fu"><a href="reference/delete_harvest_creds.html">delete_harvest_creds</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="reference/get_table.html">get_table</a></span><span class="op">(</span>table <span class="op">=</span> <span class="st">'projects'</span>, token <span class="op">=</span> <span class="va">my_token</span><span class="op">)</span></code></pre></div>
+</div>
 <div id="non-interactive-sessions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#non-interactive-sessions" class="anchor"></a>Non-Interactive Sessions</h3>
-<p>For non-interactive users such as Rscript, harvestR will still attempt to retrieve your account ID and personal access token from the environment variables <code>HARVEST_ACCOUNT_ID</code> and <code>HARVEST_PAT</code>. You can use other means of adding the credentials to the system environment variables, we use the Renviron.site file for our servers and the withr package for other situations.</p>
+<p>For non-interactive users such as Rscript, harvestR will still attempt to retrieve your account ID and personal access token from the environment variables <code>HARVEST_ACCOUNT_ID</code> and <code>HARVEST_PAT</code>. For additional information for storing credentials refer to <a href="https://usethis.r-lib.org/articles/articles/git-credentials.html">usethis</a>.</p>
 </div>
 </div>
 <div id="get-tables" class="section level2">
@@ -119,13 +130,17 @@
 <span class="va">projects</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_table.html">get_table</a></span><span class="op">(</span>table <span class="op">=</span> <span class="st">'projects'</span><span class="op">)</span>
 
 <span class="co"># Request the time_entries table for 3 months</span>
-<span class="va">time_entries</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_table.html">get_table</a></span><span class="op">(</span>table <span class="op">=</span> <span class="st">'time_entries'</span>, email <span class="op">=</span> <span class="st">'your_email'</span>, query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">'2018-01-01'</span>, to <span class="op">=</span> <span class="st">'2018-03-31'</span><span class="op">)</span><span class="op">)</span>
+<span class="va">time_entries</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_table.html">get_table</a></span><span class="op">(</span>table <span class="op">=</span> <span class="st">'time_entries'</span>, query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">'2018-01-01'</span>, to <span class="op">=</span> <span class="st">'2018-03-31'</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Request the time_entries table for 3 months in with parallel requests</span>
-<span class="va">time_entries</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_table.html">get_table</a></span><span class="op">(</span>table <span class="op">=</span> <span class="st">'time_entries'</span>, email <span class="op">=</span> <span class="st">'your_email'</span>, query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">'2018-01-01'</span>, to <span class="op">=</span> <span class="st">'2018-03-31'</span><span class="op">)</span>, plan_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>strategy <span class="op">=</span> <span class="st">"multicore"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">time_entries</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_table.html">get_table</a></span><span class="op">(</span>table <span class="op">=</span> <span class="st">'time_entries'</span>, query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">'2018-01-01'</span>, to <span class="op">=</span> <span class="st">'2018-03-31'</span><span class="op">)</span>, plan_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>strategy <span class="op">=</span> <span class="st">"multicore"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="co"># Request the time_entries table for 3 months in parallel mode with auto retrying (set to make 3 attempts) and messaging</span>
-<span class="va">time_entries</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_table.html">get_table</a></span><span class="op">(</span>table <span class="op">=</span> <span class="st">'time_entries'</span>, email <span class="op">=</span> <span class="st">'your_email'</span>, query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">'2018-01-01'</span>, to <span class="op">=</span> <span class="st">'2018-03-31'</span><span class="op">)</span>, plan_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>strategy <span class="op">=</span> <span class="st">"multicore"</span><span class="op">)</span>, auto_retry <span class="op">=</span> <span class="cn">T</span>, quiet <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
+<span class="co"># Request the time_entries table for 3 months in parallel mode with automatic retries lowered to 1 (times) and messaging on (quiet)</span>
+<span class="co"># Windows does not support multicore plans, users must use multisession</span>
+<span class="va">time_entries</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_table.html">get_table</a></span><span class="op">(</span>table <span class="op">=</span> <span class="st">'time_entries'</span>, query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">'2018-01-01'</span>, to <span class="op">=</span> <span class="st">'2018-03-31'</span><span class="op">)</span>, plan_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>strategy <span class="op">=</span> <span class="st">"multisession"</span><span class="op">)</span>, times <span class="op">=</span> <span class="fl">1</span>, quiet <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
+
+<span class="co"># Request using an httr option (see `httr::httr_options()`) and an oauth token</span>
+<span class="va">projects</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_table.html">get_table</a></span><span class="op">(</span>table <span class="op">=</span> <span class="st">'projects'</span>, http_version <span class="op">=</span> <span class="fl">2</span>, token <span class="op">=</span> <span class="va">my_token</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
   </div>

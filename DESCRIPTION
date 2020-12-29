@@ -1,6 +1,6 @@
 Package: harvestR
 Title: Utility functions for interacting with the Harvest API
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: 
     c(person(given = "Mark",
              family = "Druffel",
@@ -10,14 +10,14 @@ Authors@R:
              family = "Crawford",
              role = "ctb",
              email = "kyle.s.crawford@gmail.com"),
-      person(given = "Propeller Consulting",
-             role = "cph"),
       person(given = "Chris",
              family = "Fry",
              role = "ctb"),
       person(given = "Joe",
              family = "Thorley",
-             role = "ctb"))
+             role = "ctb"),
+      person(given = "Propeller Consulting",
+             role = "cph"))
 Description: Provides utility functions for interacting with the
     Harvest time tracking system API v2.
 License: GPL-3

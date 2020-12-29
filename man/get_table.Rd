@@ -8,9 +8,12 @@ get_table(
   table = NULL,
   user = harvestR::get_harvest_account(),
   key = harvestR::get_harvest_pat(),
-  email = "",
   query = NULL,
+  plan_options = NULL,
+  quiet = T,
   ...,
+  auto_retry = lifecycle::deprecated(),
+  email = lifecycle::deprecated(),
   verbose = lifecycle::deprecated(),
   strategy = lifecycle::deprecated()
 )
@@ -22,47 +25,64 @@ get_table(
 
 \item{key}{Character key (e.g. key = 'Bearer <secret key>') for API authentication. Register at \href{https://id.getharvest.com/developers}{Harvest Developers}. Defaults to `get_harvest_pat()`}
 
-\item{email}{Character email address for API call. (Optional)}
+\item{plan_options}{List; list of parameters passed to \code{future::plan}. The strategy parameter is required to implement parallel requests, see \href{https://cran.r-project.org/web/packages/future/vignettes/future-1-overview.html}{Future Package Overview} for more details.}
 
-\item{...}{Additional arguments, some are forwarded to other functions - see details.}
+\item{quiet}{Logical; controls harvestR messaging, TRUE returns only errors in the console and FALSE returns messages, warnings, and errors. Does not impact deprecation warnings.}
+
+\item{...}{Additional arguments forwarded to `httr::RETRY()` and `httr::config()`. Refer to details for more information.}
 }
 \value{
 dataframe with contents of requested Harvest table
 }
 \description{
-Submits get requests to the Harvest API v2. The function is a wrapper around the httr::GET function and returns the Harvest table.
+Submits get requests to the Harvest API v2 with options configured for authentication, parallelism, and logging
 }
 \details{
 \lifecycle{maturing}
 
 
-Description of ... parameters
+Description of ... parameters. Additional arguments are forwarded to config.
 \itemize{
-   \item \code{auto_retry} Logical; control whether to retry GET requests upon failure. TRUE results 2 retries (3 attempts total). FALSE results in no retries (1 attempt total).
-   \item \code{quiet} Logical; controls messaging. TRUE will result in displaying only errors in the console. FALSE will results in displaying messages, warnings, and errors. Depending on execution strategy, messages from httr::GET may not be surfaced to the console due to multiple R sessions running and stderror relaying issues. See \href{https://cran.r-project.org/web/packages/future/vignettes/future-2-output.html}{Future Package Output} for me details.
-   \item \code{plan_options} List; list of parameters passed to \code{future::plan}. The strategy parameter is required to implement parallel requests, see \href{https://cran.r-project.org/web/packages/future/vignettes/future-1-overview.html}{Future Package Overview} for more details.
+   \item \code{times} integer; Forwarded to RETRY, maximum number of requests to attempt. Defaults to 3.
+   \item \code{token} httr-token; Forwarded to config, an OAuth token (1.0 or 2.0).
    }
 }
 \examples{
 \dontrun{
+
+# Create a credentials record on the system keyring
 create_harvest_creds()
+
+# Set the credentials in the environment for get_table
 set_harvest_creds()
-get_table(table = 'projects')
-get_table(table = 'time_entries',
-          email = 'your_email',
-          query = list(from = '2018-01-01', to = '2018-12-31'),
-          plan_options = list(strategy = "multicore"),
-          auto_retry = T,
-          quiet = T)
+
+# Barebones call to get_table
+projects <- get_table(table = 'projects')
+
+# Parallel request with 2 retries and messaging
+# Windows users should use multisession, multicore will not work
+time_entries <- get_table(table = 'time_entries',
+query = list(from = '2018-01-01', to = '2018-12-31'),
+plan_options = list(strategy = "multicore"),
+times = 2,
+quiet = F)
+
+# Request using an httr option (see `httr::httr_options()`) and an oauth token
+projects <- get_table(table = 'projects',
+http_version = 2,
+token = my_token)
+
 }
 
 }
 \references{
 \href{https://help.getharvest.com/api-v2}{Harvest API v2}
-\href{https://id.getharvest.com/developers}{Harvest Developers Page}
-\href{https://cran.r-project.org/web/packages/future/vignettes/future-1-overview.html}{Future Pacakge Overview}
+\href{https://id.getharvest.com/developers}{Harvest Developers Page},
+\href{https://cran.r-project.org/web/packages/future/vignettes/future-1-overview.html}{Future Pacakge Overview},
 \href{https://cran.r-project.org/web/packages/future/vignettes/future-2-output.html}{Future Package Output}
 }
 \seealso{
 `future::plan()` for more detail regarding how to implement parallel api calls
+
+`httr::httr_options()` for more detail regarding httr configurations
 }

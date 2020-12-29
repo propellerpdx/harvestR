@@ -4,7 +4,7 @@
 \alias{get_requests}
 \title{Execute multiple get_request calls}
 \usage{
-get_requests(urls, group_name, table, user, key, email = NULL, ...)
+get_requests(urls, table, user, key, ...)
 }
 \arguments{
 \item{urls}{Named list of character vectors of urls in groups from build_url_groups function.}
@@ -15,8 +15,6 @@ get_requests(urls, group_name, table, user, key, email = NULL, ...)
 
 \item{key}{Character key (e.g. key = 'Bearer <secret key>') for API authentication. Register at \href{https://id.getharvest.com/developers}{Harvest Developers}.}
 
-\item{email}{Character email address for API call. (Optional)}
-
 \item{...}{Additional arguments, potentially passed to other functions - see details in \link[harvestR]{get_table}}
 }
 \value{
@@ -24,19 +22,6 @@ named list of contents of API responses for specified group of URLs
 }
 \description{
 Submits multiple get requests to the Harvest API v2. Supports parallel execution through furrr & the future package.
-}
-\examples{
-\dontrun{
-urls = list('url_1', 'url_2', 'etc')
-
-get_requests(url = 'https://api.harvestapp.com/v2/projects',
-             user = user_id,
-             key = api_key,
-             email = 'your_email'
-             auto_retry = F,
-             quiet = T,
-             strategy = 'sequential')
-}
 }
 \references{
 \url{https://github.com/HenrikBengtsson/future} \cr

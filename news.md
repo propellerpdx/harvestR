@@ -3,25 +3,20 @@
 ## General features
 
 * Added messaging to `get_table()` to address verbose output issue.
-* The strategy & verbose parameters are deprecated and replaced by plan_options and quiet, respectively.
+* The strategy, auto_retry, and verbose parameters are deprecated and replaced by plan_options, times, and quiet, respectively.
 * Added credential management workflow, special thanks to [joethorley](https://github.com/joethorley) for suggesting the idea - sorry for the long wait!
 
 ## Messaging
-
-* Implementing parallel requests in `get_table()` broke verbose output. The future package has a [known limitation](https://cran.r-project.org/web/packages/future/vignettes/future-2-output.html) with messaging across parallel threads. 
-* The `verbose` parameter was passed to httr to provide verbose messaging on each get request, but messages in any parallel threads are dropped even when using `sink()`. 
-* To enable logging for data pipelines, we added custom messages inside the `get_table()` function which can be triggered by setting `quiet = FALSE`. 
+The `get_table()` function had a `verbose` parameter was passed to `httr::verbose()`. Implementing parallel requests in `get_table()` broke the verbose output. The future package has a [known limitation](https://cran.r-project.org/web/packages/future/vignettes/future-2-output.html) with messaging across parallel threads. We expect many users will want to take advantage of parallel requests so we added custom messaging inside the `get_table()` which provides information for logging. The messaging can be turned on by setting `quiet = FALSE` in the `get_table()` call. To divert output to a log file you can wrap calls with logging functions. 
 
 ## Parameter changes
-
-* The `verbose` parameter is deprecated because it does not work on parallel threads. The new `quiet` is a non-standard replacement. 
+* The `verbose` parameter is deprecated because it does not work on parallel threads (refer to Messaging above for more details). The `quiet` parameter is the suggested replacement. Verbose will still be passed to `httr::config()`, but a warning will be issued for the time being to make sure users are aware of the behavior changes. 
 * The `strategy` parameter is deprecated in favor of plan_options. The `strategy` parameter was passed to `future::plan()`, but did not allow users to modify any other parameters inside `future::plan()`. The new `plan_options` parameter allows users to pass any parameters into `future::plan()` in a named list.  
-* A few parameters are now listed inside `...`  This change does not impact users outside of the vignettes, but it allows us to make changes in the future with less risk of breaking changes.
+* The `auto_retry` parameter is deprecated because it was used to retry get requests that failed in custom logic. We moved to the `httr::RETRY()` function in order to simplify. The `times` parameter is the suggested replacement. 
+* Additional arguments in ... were specifically forwarded to httr functions, but only a few were supported. `get_table()` now forwards listed arguments to `httr::RETRY` and attempts to forward all other arguments to `httr::config()` including token (for oath requests). 
 
 ## Credential Management
-
-* New functions that allow interactive users to securely save credentials on their system using the [keyring](https://github.com/r-lib/keyring) package.
-* Refer to package readme for more information or refer to the `create_harvest_creds()` function to get started. 
+Joe Thorley made the suggestion of adding credential management functions to make fetching keys easier within the library. We added a few functions that are intended to provide a credential management workflow for harvestR. They enable interactive users to securely save credentials on their system using the [keyring](https://github.com/r-lib/keyring) package. Scheduled jobs can still take advantage of the system with system environment variables. Refer to the harvestR package readme for more info or refer to the `create_harvest_creds()` function to get started. 
 
 # harvestR 1.0.0
 

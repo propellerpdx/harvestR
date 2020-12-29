@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">harvestR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -129,36 +129,30 @@
 <a href="#general-features" class="anchor"></a>General features</h2>
 <ul>
 <li>Added messaging to <code><a href="reference/get_table.html">get_table()</a></code> to address verbose output issue.</li>
-<li>The strategy &amp; verbose parameters are deprecated and replaced by plan_options and quiet, respectively.</li>
+<li>The strategy, auto_retry, and verbose parameters are deprecated and replaced by plan_options, times, and quiet, respectively.</li>
 <li>Added credential management workflow, special thanks to <a href="https://github.com/joethorley">joethorley</a> for suggesting the idea - sorry for the long wait!</li>
 </ul>
 </div>
 <div id="messaging" class="section level2">
 <h2 class="hasAnchor">
 <a href="#messaging" class="anchor"></a>Messaging</h2>
-<ul>
-<li>Implementing parallel requests in <code><a href="reference/get_table.html">get_table()</a></code> broke verbose output. The future package has a <a href="https://cran.r-project.org/web/packages/future/vignettes/future-2-output.html">known limitation</a> with messaging across parallel threads.</li>
-<li>The <code>verbose</code> parameter was passed to httr to provide verbose messaging on each get request, but messages in any parallel threads are dropped even when using <code><a href="https://rdrr.io/r/base/sink.html">sink()</a></code>.</li>
-<li>To enable logging for data pipelines, we added custom messages inside the <code><a href="reference/get_table.html">get_table()</a></code> function which can be triggered by setting <code>quiet = FALSE</code>.</li>
-</ul>
+<p>The <code><a href="reference/get_table.html">get_table()</a></code> function had a <code>verbose</code> parameter was passed to <code><a href="https://httr.r-lib.org/reference/verbose.html">httr::verbose()</a></code>. Implementing parallel requests in <code><a href="reference/get_table.html">get_table()</a></code> broke the verbose output. The future package has a <a href="https://cran.r-project.org/web/packages/future/vignettes/future-2-output.html">known limitation</a> with messaging across parallel threads. We expect many users will want to take advantage of parallel requests so we added custom messaging inside the <code><a href="reference/get_table.html">get_table()</a></code> which provides information for logging. The messaging can be turned on by setting <code>quiet = FALSE</code> in the <code><a href="reference/get_table.html">get_table()</a></code> call. To divert output to a log file you can wrap calls with logging functions.</p>
 </div>
 <div id="parameter-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#parameter-changes" class="anchor"></a>Parameter changes</h2>
 <ul>
-<li>The <code>verbose</code> parameter is deprecated because it does not work on parallel threads. The new <code>quiet</code> is a non-standard replacement.</li>
+<li>The <code>verbose</code> parameter is deprecated because it does not work on parallel threads (refer to Messaging above for more details). The <code>quiet</code> parameter is the suggested replacement. Verbose will still be passed to <code><a href="https://httr.r-lib.org/reference/config.html">httr::config()</a></code>, but a warning will be issued for the time being to make sure users are aware of the behavior changes.</li>
 <li>The <code>strategy</code> parameter is deprecated in favor of plan_options. The <code>strategy</code> parameter was passed to <code><a href="https://rdrr.io/pkg/future/man/plan.html">future::plan()</a></code>, but did not allow users to modify any other parameters inside <code><a href="https://rdrr.io/pkg/future/man/plan.html">future::plan()</a></code>. The new <code>plan_options</code> parameter allows users to pass any parameters into <code><a href="https://rdrr.io/pkg/future/man/plan.html">future::plan()</a></code> in a named list.<br>
 </li>
-<li>A few parameters are now listed inside <code>...</code> This change does not impact users outside of the vignettes, but it allows us to make changes in the future with less risk of breaking changes.</li>
+<li>The <code>auto_retry</code> parameter is deprecated because it was used to retry get requests that failed in custom logic. We moved to the <code><a href="https://httr.r-lib.org/reference/RETRY.html">httr::RETRY()</a></code> function in order to simplify. The <code>times</code> parameter is the suggested replacement.</li>
+<li>Additional arguments in … were specifically forwarded to httr functions, but only a few were supported. <code><a href="reference/get_table.html">get_table()</a></code> now forwards listed arguments to <code><a href="https://httr.r-lib.org/reference/RETRY.html">httr::RETRY</a></code> and attempts to forward all other arguments to <code><a href="https://httr.r-lib.org/reference/config.html">httr::config()</a></code> including token (for oath requests).</li>
 </ul>
 </div>
 <div id="credential-management" class="section level2">
 <h2 class="hasAnchor">
 <a href="#credential-management" class="anchor"></a>Credential Management</h2>
-<ul>
-<li>New functions that allow interactive users to securely save credentials on their system using the <a href="https://github.com/r-lib/keyring">keyring</a> package.</li>
-<li>Refer to package readme for more information or refer to the <code><a href="reference/create_harvest_creds.html">create_harvest_creds()</a></code> function to get started.</li>
-</ul>
+<p>Joe Thorley made the suggestion of adding credential management functions to make fetching keys easier within the library. We added a few functions that are intended to provide a credential management workflow for harvestR. They enable interactive users to securely save credentials on their system using the <a href="https://github.com/r-lib/keyring">keyring</a> package. Scheduled jobs can still take advantage of the system with system environment variables. Refer to the harvestR package readme for more info or refer to the <code><a href="reference/create_harvest_creds.html">create_harvest_creds()</a></code> function to get started.</p>
 </div>
 </div>
 <div id="harvestr-100" class="section level1">
