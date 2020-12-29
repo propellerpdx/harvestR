@@ -42,12 +42,18 @@ get_request <- function(url = NULL,
                           httr::add_headers(.headers = c("Harvest-Account-ID" = user,
                                                          Authorization = key)),
                           times = input_params$times)
-  content <- httr::content(response, as = "text", encoding = "UTF-8") %>%
-      jsonlite::fromJSON(., flatten = T)
-  if(!input_params$quiet){
-    harvestR:::parse_response_message(response = response, content = content, table = input_params$table)
+
+  if(!httr::http_error(response)){
+    content <- httr::content(response, as = "text", encoding = "UTF-8") %>%
+        jsonlite::fromJSON(., flatten = T)
+
+    if(!input_params$quiet){
+      harvestR:::parse_response_message(response = response, content = content, table = input_params$table)
+    }
+    return(content)
+  } else{
+    stop(httr::stop_for_status(reponse))
   }
-  return(content)
 }
 
 #' Execute multiple get_request calls
