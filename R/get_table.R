@@ -181,7 +181,6 @@ get_table <- function(table = NULL,
   return(df)
 }
 
-
 #' Check date params for Harvest API v2 standards
 #'
 #' Harvest API v2 accepts a few date parameters which have strict requirements. Date parameters must
