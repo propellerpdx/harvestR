@@ -146,10 +146,13 @@ get_table <- function(table = NULL,
     if(!is.null(plan_options)){
       rlang::call2('plan', !!!plan_options, .ns = "future") %>%
         rlang::eval_tidy()
+      furrr_opts <- switch((plan_options$strategy != 'sequential') + 1,
+                           furrr::furrr_options(packages = c("purrr", "harvestR"), seed = T),
+                           furrr::furrr_options(packages = c("purrr", "harvestR")))
+    } else{
+      furrr_opts <- furrr::furrr_options()
     }
-    furrr_opts <- switch(plan_options$strategy != 'sequential' + 1,
-                         furrr::furrr_options(packages = c("purrr", "harvestR"), seed = T),
-                         furrr::furrr_options(packages = c("purrr", "harvestR")))
+
 
     # Get requests ------------------------------------------------------------
     responses <- purrr::map(url_groups, function(x) harvestR:::get_requests_lim(urls = x,
