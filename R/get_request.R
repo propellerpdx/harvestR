@@ -98,7 +98,6 @@ get_requests <- function(urls,
   return(responses)
 }
 
-
 #' Execute multiple get_request calls with rate limiting
 #'
 #' @importFrom ratelimitr limit_rate
