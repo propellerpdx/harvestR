@@ -143,16 +143,14 @@ get_table <- function(table = NULL,
                                               quiet = quiet)
     # Future Config -----------------------------------------------------------
     # Forward plan_options to the future::plan function to set up an execution plan, no need to default if one isn't provided because future::plan will default to sequential
+    furrr_opts <- furrr::furrr_options()
     if(!is.null(plan_options)){
       rlang::call2('plan', !!!plan_options, .ns = "future") %>%
         rlang::eval_tidy()
       if(plan_options$strategy != "sequential"){
         furrr_opts <- furrr::furrr_options(seed = T)
       }
-    } else{
-      furrr_opts <- furrr::furrr_options()
     }
-
 
     # Get requests ------------------------------------------------------------
     responses <- purrr::map(url_groups, function(x) harvestR:::get_requests_lim(urls = x,
