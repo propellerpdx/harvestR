@@ -133,12 +133,11 @@ get_table <- function(table = NULL,
                                      quiet = quiet,
                                      table = table,
                                      token = token)
-  if(!quiet & response$total_pages > 1){
-    message(glue::glue('Initial request shows {response$total_entries} records. Initiating the remaining {response$total_pages-1} requests.'))
-  }
-
   # Get requests (multi-page) -----------------------------------------------
   if(response$total_pages > 1){
+    if(!quiet){
+      message(glue::glue('Initial request shows {response$total_entries} records. Initiating the remaining {response$total_pages-1} requests.'))
+    }
     urls <- purrr::map(2:response$total_pages, function(x) httr::modify_url(url, query = list(page = x)))
     url_groups <- harvestR:::build_url_groups(urls = urls,
                                               quiet = quiet)
@@ -148,6 +147,10 @@ get_table <- function(table = NULL,
       rlang::call2('plan', !!!plan_options, .ns = "future") %>%
         rlang::eval_tidy()
     }
+    furrr_opts <- switch(plan_options$strategy != 'sequential' + 1,
+                         furrr::furrr_options(packages = c("purrr", "harvestR"), seed = T),
+                         furrr::furrr_options(packages = c("purrr", "harvestR")))
+
     # Get requests ------------------------------------------------------------
     responses <- purrr::map(url_groups, function(x) harvestR:::get_requests_lim(urls = x,
                                                                                 user = user,
@@ -156,7 +159,8 @@ get_table <- function(table = NULL,
                                                                                 quiet = quiet,
                                                                                 httr_config_opts = httr_config_opts,
                                                                                 times = input_params$times,
-                                                                                token = token))
+                                                                                token = token,
+                                                                                furrr_opts = furrr_opts))
     responses_df <- purrr::map(responses, function(x){ purrr::map_dfr(x, function(y) y[table]) }) %>%
       purrr::map(table) %>%
       dplyr::bind_rows()

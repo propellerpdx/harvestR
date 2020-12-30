@@ -93,7 +93,8 @@ get_requests <- function(urls,
                                                                           times = input_params$times,
                                                                           httr_config_opts = input_params$httr_config_opts,
                                                                           quiet = input_params$quiet,
-                                                                          token = input_params$token))
+                                                                          token = input_params$token),
+                                 .options = furrr_opts)
   return(responses)
 }
 
